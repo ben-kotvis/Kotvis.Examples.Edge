@@ -2,3 +2,5 @@
 .env
 **/config/
 *.user
+[Oo]bj/
+[Bb]in/
