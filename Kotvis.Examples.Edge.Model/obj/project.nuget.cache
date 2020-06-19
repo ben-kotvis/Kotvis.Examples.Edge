@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "weIaNwhoTQ4bPt0/+wIlw0YDGHL2kE5bYHs6cOisPBxhySqOR0V6gq31jYu6hfG2Wj7DEX7MrsvxY1zkc3KcTw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\bkotvis\\source\\repos\\Kotvis.Examples.Edge\\Kotvis.Examples.Edge.Model\\Kotvis.Examples.Edge.Model.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\bkotvis\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\bkotvis\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
