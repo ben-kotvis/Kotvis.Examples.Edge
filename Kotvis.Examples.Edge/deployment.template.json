@@ -108,6 +108,16 @@
                 "value": "<Your local account key>"
               }
             }
+          },
+          "scheduler": {
+            "version": "1.0.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULEDIR<../scheduler>}",
+              "createOptions": {}
+            }
           }
         }
       }
@@ -119,7 +129,8 @@
           "pubsubsimulatorToIoTHub": "FROM /messages/modules/pubsubsimulator/outputs/* INTO $upstream",
           "sensorTopubsubsimulator": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/pubsubsimulator/inputs/input1\")",
           "subscriberToIoTHub": "FROM /messages/modules/subscriber/outputs/* INTO $upstream",
-          "storageToIoTHub": "FROM /messages/modules/storage/outputs/* INTO $upstream"
+          "storageToIoTHub": "FROM /messages/modules/storage/outputs/* INTO $upstream",
+          "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
