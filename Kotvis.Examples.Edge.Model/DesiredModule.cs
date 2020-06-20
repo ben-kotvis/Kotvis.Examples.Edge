@@ -8,6 +8,7 @@ namespace Kotvis.Examples.Edge.Model
     {
         public DesiredModule()
         {
+            Publishers = new List<DesiredPublisher>();
         }
         public ModuleState State { get; set; }
         public List<DesiredPublisher> Publishers { get; set; }

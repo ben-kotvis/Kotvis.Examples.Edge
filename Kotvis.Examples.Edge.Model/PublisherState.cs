@@ -7,6 +7,8 @@ namespace Kotvis.Examples.Edge.Model
     public enum PublisherState
     {   
         Unknown,
+        Error,
+        Subscribed,
         Healthy
     }
 }

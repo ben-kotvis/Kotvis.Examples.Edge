@@ -10,6 +10,7 @@ namespace Kotvis.Examples.Edge.Model
         {
             public const string Module = "Module";
             public const string ModuleState = "State";
+            public const string PublisherPrefix = "Publisher-";
         }
 
         public class JobNames
