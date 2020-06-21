@@ -51,6 +51,7 @@ namespace pubsubsimulator
             Console.WriteLine("IoT Hub module client initialized.");
             // Register callback to be called when a message is received by the module
             await ioTHubModuleClient.SetInputMessageHandlerAsync("input1", PipeMessage, ioTHubModuleClient);
+            
         }
 
         /// <summary>

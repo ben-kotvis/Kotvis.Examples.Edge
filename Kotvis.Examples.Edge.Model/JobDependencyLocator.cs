@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace Kotvis.Examples.Edge.Model
 {
@@ -12,19 +13,20 @@ namespace Kotvis.Examples.Edge.Model
             ISchedulerService schedulerService,
             IPublisherApiService publisherApiService,
             Module module,
-            DesiredModule desiredModule)
+            CancellationTokenSource cancellationTokenSource)
         {
             EdgeService = edgeService;
             SchedulerService = schedulerService;
             PublisherApiService = publisherApiService;
             Module = module;
-            DesiredModule = desiredModule;
+            CancellationTokenSource = cancellationTokenSource;
         }
 
         public IEdgeService EdgeService { get; }
         public ISchedulerService SchedulerService { get; }
         public IPublisherApiService PublisherApiService { get; }
         public Module Module { get; }
-        public DesiredModule DesiredModule { get; }
+        public CancellationTokenSource CancellationTokenSource { get; }
+        public CancellationToken CancellationToken => CancellationTokenSource.Token;
     }
 }

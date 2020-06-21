@@ -5,13 +5,13 @@
       "Id": "filePublisherId",
       "Host": "127.0.0.2",
       "Port": 8088,
-      "State": 0
+      "DesiredState": 0
     },
     "Publisher-filePublisherIdTwo": {
       "Id": "filePublisherIdTwo",
       "Host": "127.0.0.3",
       "Port": 8087,
-      "State": 2
+      "DesiredState": 1
     }
   }
 }

@@ -4,11 +4,13 @@ using System.Text;
 
 namespace Kotvis.Examples.Edge.Model
 {
-    public enum PublisherState
+    public enum ActualPublisherState
     {   
         Unknown,
         Error,
         Subscribed,
-        Healthy
+        Healthy,
+        StandingBy,
+        Removed
     }
 }

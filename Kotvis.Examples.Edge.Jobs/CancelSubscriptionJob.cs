@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Kotvis.Examples.Edge.Jobs
 {
-    public class SubscribeJob : IJob
+    public class CancelSubscriptionJob : IJob
     {
         private readonly JobDependencyLocator _jobDependencies;
         private readonly Publisher _publisher;
-        public SubscribeJob(JobDependencyLocator jobDependencies, Publisher publisher)
+        public CancelSubscriptionJob(JobDependencyLocator jobDependencies, Publisher publisher)
         {
             _jobDependencies = jobDependencies;
             _publisher = publisher;
@@ -21,9 +21,9 @@ namespace Kotvis.Examples.Edge.Jobs
 
         public async Task Run()
         {
-            var subscriptionId = await _jobDependencies.PublisherApiService.Subscribe(_publisher, _jobDependencies.CancellationToken);
-            _publisher.ActualState = ActualPublisherState.Subscribed;
-            _publisher.SubscriptionId = subscriptionId;
+            await _jobDependencies.PublisherApiService.CancelSubscription(_publisher, _jobDependencies.CancellationToken);
+            _publisher.SubscriptionId = default;
+            _publisher.ActualState = ActualPublisherState.Unknown;
         }
     }
 }
