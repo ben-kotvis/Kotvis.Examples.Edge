@@ -23,7 +23,7 @@ namespace Kotvis.Examples.Edge.Jobs
         {
             await _jobDependencies.PublisherApiService.CancelSubscription(_publisher, _jobDependencies.CancellationToken);
             _publisher.SubscriptionId = default;
-            _publisher.ActualState = ActualPublisherState.Unknown;
+            _publisher.ActualState = ActualPublisherState.StandingBy;
         }
     }
 }

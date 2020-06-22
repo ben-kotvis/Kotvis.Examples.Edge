@@ -6,7 +6,7 @@ namespace Kotvis.Examples.Edge.Model
 {
     public enum DesiredPublisherState
     {   
-        Healthy,
+        Online,
         StandingBy,
         Removed
     }

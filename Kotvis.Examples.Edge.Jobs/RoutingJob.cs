@@ -26,7 +26,7 @@ namespace Kotvis.Examples.Edge.Jobs
                 IJob job = default;
                 switch(publisher.DesiredState)
                 {
-                    case DesiredPublisherState.Healthy:
+                    case DesiredPublisherState.Online:
                         job = CreateHealthyJob(publisher);
                         break;
                     case DesiredPublisherState.Removed:

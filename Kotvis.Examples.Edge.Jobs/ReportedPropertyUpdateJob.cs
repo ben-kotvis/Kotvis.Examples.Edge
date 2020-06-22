@@ -20,7 +20,7 @@ namespace Kotvis.Examples.Edge.Jobs
 
         public async Task Run()
         {
-            if(!_jobDependencies.Module.Publishers.Any(i => i.IsChanged))
+            if(!_jobDependencies.Module.IsChanged && !_jobDependencies.Module.Publishers.Any(i => i.IsChanged))
             {
                 return;
             }
@@ -42,6 +42,7 @@ namespace Kotvis.Examples.Edge.Jobs
             {
                 publisher.AcceptChanges();
             }
+            _jobDependencies.Module.AcceptChanges();
         }
     }
 }
