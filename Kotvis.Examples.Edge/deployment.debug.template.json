@@ -57,17 +57,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULEDIR<../pubsubsimulator>.debug}",
-              "createOptions": {}
-            }
-          },
-          "SimulatedTemperatureSensor": {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0",
+              "image": "${MODULEDIR<../Kotvis.Examples.Edge.PubSubSimulator>.debug}",
               "createOptions": {}
             }
           },
@@ -77,7 +67,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULEDIR<../subscriber>.debug}",
+              "image": "${MODULEDIR<../Kotvis.Examples.Edge.Subscriber>.debug}",
               "createOptions": {}
             }
           },
@@ -115,7 +105,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULEDIR<../scheduler>.debug}",
+              "image": "${MODULEDIR<../Kotvis.Examples.Edge.Scheduler>.debug}",
               "createOptions": {}
             }
           }

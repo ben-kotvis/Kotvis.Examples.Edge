@@ -23,9 +23,9 @@
     <None Include="deployment.debug.template.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\pubsubsimulator\pubsubsimulator.csproj" />
-    <ProjectReference Include="..\scheduler\scheduler.csproj" />
-    <ProjectReference Include="..\subscriber\subscriber.csproj" />
+    <ProjectReference Include="..\pubsubsimulator\Kotvis.Examples.Edge.PubSubSimulator.csproj" />
+    <ProjectReference Include="..\scheduler\Kotvis.Examples.Edge.Scheduler.csproj" />
+    <ProjectReference Include="..\subscriber\Kotvis.Examples.Edge.Subscriber.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsRoot)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Azure IoT Edge Tools\AzureIoTEdgeProject.Build.targets" />
   <Import Project="$(MSBuildToolsRoot)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Azure IoT Edge Tools\AzureIoTEdgeProject.Build.props" />
