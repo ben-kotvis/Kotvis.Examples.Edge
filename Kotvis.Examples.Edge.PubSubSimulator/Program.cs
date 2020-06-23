@@ -17,7 +17,7 @@ namespace pubsubsimulator
                     webBuilder.UseKestrel(options =>
                     {
                         options.AllowSynchronousIO = false;
-                        options.ListenAnyIP(8081);
+                        options.ListenAnyIP(8082);
                     });
                     webBuilder.UseStartup<Startup>();
                 });
