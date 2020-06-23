@@ -51,6 +51,26 @@
           }
         },
         "modules": {
+          "subscriber": {
+            "version": "1.0.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULEDIR<../Kotvis.Examples.Edge.Subscriber>.debug}",
+              "createOptions": {
+                "HostConfig": {
+                  "PortBindings": {
+                    "8081/tcp": [
+                      {
+                        "HostPort": "8081"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
           "pubsubsimulator": {
             "version": "1.0.0",
             "type": "docker",
@@ -59,44 +79,6 @@
             "settings": {
               "image": "${MODULEDIR<../Kotvis.Examples.Edge.PubSubSimulator>.debug}",
               "createOptions": {}
-            }
-          },
-          "subscriber": {
-            "version": "1.0.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "${MODULEDIR<../Kotvis.Examples.Edge.Subscriber>.debug}",
-              "createOptions": {}
-            }
-          },
-          "storage": {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "mcr.microsoft.com/azure-blob-storage:latest",
-              "createOptions": {
-                "HostConfig": {
-                  "PortBindings": {
-                    "11002/tcp": [
-                      {
-                        "HostPort": "11002"
-                      }
-                    ]
-                  }
-                }
-              }
-            },
-            "env": {
-              "LOCAL_STORAGE_ACCOUNT_NAME": {
-                "value": "<Your local account name>"
-              },
-              "LOCAL_STORAGE_ACCOUNT_KEY": {
-                "value": "<Your local account key>"
-              }
             }
           },
           "scheduler": {
@@ -117,10 +99,11 @@
         "schemaVersion": "1.0",
         "routes": {
           "pubsubsimulatorToIoTHub": "FROM /messages/modules/pubsubsimulator/outputs/* INTO $upstream",
-          "sensorTopubsubsimulator": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/pubsubsimulator/inputs/input1\")",
           "subscriberToIoTHub": "FROM /messages/modules/subscriber/outputs/* INTO $upstream",
           "storageToIoTHub": "FROM /messages/modules/storage/outputs/* INTO $upstream",
-          "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/* INTO $upstream"
+          "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/* INTO $upstream",
+          "PubSubSimulatorToIoTHub": "FROM /messages/modules/Kotvis.Examples.Edge.PubSubSimulator/outputs/* INTO $upstream",
+          "SchedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

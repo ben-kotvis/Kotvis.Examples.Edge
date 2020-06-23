@@ -108,6 +108,26 @@
               "image": "${MODULEDIR<../Kotvis.Examples.Edge.Scheduler>}",
               "createOptions": {}
             }
+          },
+          "Kotvis.Examples.Edge.PubSubSimulator": {
+            "version": "1.0.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULEDIR<../Kotvis.Examples.Edge.PubSubSimulator>}",
+              "createOptions": {}
+            }
+          },
+          "Kotvis.Examples.Edge.Scheduler": {
+            "version": "1.0.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULEDIR<../Kotvis.Examples.Edge.Scheduler>}",
+              "createOptions": {}
+            }
           }
         }
       }
@@ -120,7 +140,9 @@
           "sensorTopubsubsimulator": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/pubsubsimulator/inputs/input1\")",
           "subscriberToIoTHub": "FROM /messages/modules/subscriber/outputs/* INTO $upstream",
           "storageToIoTHub": "FROM /messages/modules/storage/outputs/* INTO $upstream",
-          "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/* INTO $upstream"
+          "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/* INTO $upstream",
+          "Kotvis.Examples.Edge.PubSubSimulatorToIoTHub": "FROM /messages/modules/Kotvis.Examples.Edge.PubSubSimulator/outputs/* INTO $upstream",
+          "Kotvis.Examples.Edge.SchedulerToIoTHub": "FROM /messages/modules/Kotvis.Examples.Edge.Scheduler/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

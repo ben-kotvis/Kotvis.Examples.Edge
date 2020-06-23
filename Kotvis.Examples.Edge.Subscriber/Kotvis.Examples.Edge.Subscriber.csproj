@@ -28,9 +28,4 @@
     <ProjectReference Include="..\Kotvis.Examples.Edge.Jobs\Kotvis.Examples.Edge.Jobs.csproj" />
     <ProjectReference Include="..\Kotvis.Examples.Edge.Model\Kotvis.Examples.Edge.Model.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
 </Project>

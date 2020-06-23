@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotvis.Examples.Edge.PubSub
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotvis.Examples.Edge.Subscriber", "Kotvis.Examples.Edge.Subscriber\Kotvis.Examples.Edge.Subscriber.csproj", "{73960434-B0F8-43D0-80DA-73D12FD250D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotvis.Examples.Edge.PubSubSimulator.Test", "Kotvis.Examples.Edge.PubSubSimulator.Test\Kotvis.Examples.Edge.PubSubSimulator.Test.csproj", "{932EDB64-F326-4464-98DB-F357BF93FD04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotvis.Examples.Edge.Subscriber.Test", "Kotvis.Examples.Edge.Subscriber.Test\Kotvis.Examples.Edge.Subscriber.Test.csproj", "{932EDB64-F326-4464-98DB-F357BF93FD04}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotvis.Examples.Edge.Model", "Kotvis.Examples.Edge.Model\Kotvis.Examples.Edge.Model.csproj", "{28980882-089C-4D42-8B1E-62B0442BDDA6}"
 EndProject
