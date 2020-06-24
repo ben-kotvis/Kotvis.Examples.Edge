@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kotvis.Examples.Edge.Model;
+using Kotvis.Examples.Edge.Jobs;
+using Kotvis.Examples.Edge.PubSubSimulator.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,12 +21,11 @@ namespace Kotvis.Examples.Edge.Subscriber.Controllers
         }
 
         [HttpPost]
-        public Task<AcceptedResult> Post(object heartbeatRequest)
+        public async Task<AcceptedResult> Post(PublisherHeartbeat publisherHeartbeat)
         {
-            //var job = new ReceiveHeartbeatJob(_client, _module, heartbeatRequest);
-            //await job.Run();
-
-            return Task.FromResult(Accepted());
+            var job = new HeartbeatReceivedJob(_jobDependencyLocator, publisherHeartbeat);
+            await job.Run();
+            return Accepted();
         }
 
         [HttpGet]

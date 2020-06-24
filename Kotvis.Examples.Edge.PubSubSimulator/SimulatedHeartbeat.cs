@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Kotvis.Examples.Edge.PubSubSimulator.Models;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,15 @@ namespace Kotvis.Examples.Edge.PubSubSimulator
             {
                 await Task.Delay(5000);
                 RestRequest request = new RestRequest(new Uri(subscriberHost));
-                request.AddJsonBody(new { Id = id });
+
+                var subscriptionHeartbeat = new PublisherSubscriptionHeartbeat()
+                {
+                    SubscriptionExpiration = DateTimeOffset.UtcNow.AddMinutes(60),
+                    SubscriptionId = id
+                };
+
+                request.AddJsonBody(subscriptionHeartbeat);
+
                 await _client.ExecutePostAsync(request, cancellationToken);
             }
         }
