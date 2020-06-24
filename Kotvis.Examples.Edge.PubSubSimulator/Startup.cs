@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Kotvis.Examples.Edge.PubSubSimulator;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,6 +12,8 @@ namespace pubsubsimulator
     { 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<SimulatedHeartbeat>();
+            services.AddSingleton<StateManager>();
             services.AddControllers();
         }
 

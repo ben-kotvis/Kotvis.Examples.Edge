@@ -78,7 +78,17 @@
             "restartPolicy": "always",
             "settings": {
               "image": "${MODULEDIR<../Kotvis.Examples.Edge.PubSubSimulator>.debug}",
-              "createOptions": {}
+              "createOptions": {
+                "HostConfig": {
+                  "PortBindings": {
+                    "8082/tcp": [
+                      {
+                        "HostPort": "8082"
+                      }
+                    ]
+                  }
+                }
+              }
             }
           },
           "scheduler": {

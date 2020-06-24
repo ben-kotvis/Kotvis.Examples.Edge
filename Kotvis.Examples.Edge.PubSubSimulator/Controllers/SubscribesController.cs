@@ -9,11 +9,11 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SubscibesController : ControllerBase
+    public class SubscribesController : ControllerBase
     {
         private readonly StateManager _stateManager;
         private readonly SimulatedHeartbeat _simulatedHeartbeat;
-        public SubscibesController(StateManager stateManager, SimulatedHeartbeat simulatedHeartbeat)
+        public SubscribesController(StateManager stateManager, SimulatedHeartbeat simulatedHeartbeat)
         {
             _stateManager = stateManager;
             _simulatedHeartbeat = simulatedHeartbeat;
@@ -23,8 +23,14 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
         public Task<CreatedResult> Post(SubscribeRequest subscribeRequest)
         {
             var id = Guid.NewGuid().ToString();
-            _stateManager.AddTask(id, async (token) =>  await _simulatedHeartbeat.Create(subscribeRequest.SubscriberAddress, id, token));
-            return Task.FromResult(Created("", subscribeRequest));
+            _stateManager.AddTask(id, async (token) =>  await _simulatedHeartbeat.Create($"http://{subscribeRequest.SubscriberAddress}:{subscribeRequest.SubscriberPort}/api/heartbeats", id, token));
+
+            var response = new SubscribeResponse()
+            {
+                SubscriptionId = id
+            };
+
+            return Task.FromResult(Created("/hello", response));
         }
     }
 }
