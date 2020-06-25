@@ -5,9 +5,9 @@ using System.Text;
 namespace Kotvis.Examples.Edge.Model
 {
     public enum DesiredPublisherState
-    {   
-        Online,
+    {
         StandingBy,
+        Online,
         Removed
     }
 }

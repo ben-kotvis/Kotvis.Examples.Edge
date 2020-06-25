@@ -23,12 +23,15 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
         public Task<CreatedResult> Post(SubscribeRequest subscribeRequest)
         {
             var id = Guid.NewGuid().ToString();
-            _stateManager.AddTask(id, async (token) =>  await _simulatedHeartbeat.Create($"http://{subscribeRequest.SubscriberAddress}:{subscribeRequest.SubscriberPort}/api/heartbeats", id, token));
+            _stateManager.AddTask(id, async (token) =>  await _simulatedHeartbeat
+            .Create($"http://{subscribeRequest.SubscriberAddress}:{subscribeRequest.SubscriberPort}/api/heartbeats", id, token));
 
             var response = new SubscribeResponse()
             {
                 SubscriptionId = id
             };
+
+            Console.Out.WriteLine($"Subscription: {id} created");
 
             return Task.FromResult(Created("/hello", response));
         }

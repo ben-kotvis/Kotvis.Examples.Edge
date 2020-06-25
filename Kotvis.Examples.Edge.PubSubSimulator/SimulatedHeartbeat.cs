@@ -19,18 +19,22 @@ namespace Kotvis.Examples.Edge.PubSubSimulator
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(5000);
-                RestRequest request = new RestRequest(new Uri(subscriberHost));
-
-                var subscriptionHeartbeat = new PublisherSubscriptionHeartbeat()
+                try
                 {
-                    SubscriptionExpiration = DateTimeOffset.UtcNow.AddMinutes(60),
-                    SubscriptionId = id
-                };
+                    await Task.Delay(5000, cancellationToken);
+                    RestRequest request = new RestRequest(new Uri(subscriberHost));
 
-                request.AddJsonBody(subscriptionHeartbeat);
+                    var subscriptionHeartbeat = new PublisherSubscriptionHeartbeat()
+                    {
+                        SubscriptionExpiration = DateTimeOffset.UtcNow.AddMinutes(60),
+                        SubscriptionId = id
+                    };
 
-                await _client.ExecutePostAsync(request, cancellationToken);
+                    request.AddJsonBody(subscriptionHeartbeat);
+
+                    await _client.ExecutePostAsync(request, cancellationToken);
+                }
+                catch (TaskCanceledException) { }
             }
         }
     }

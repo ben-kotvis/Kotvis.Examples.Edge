@@ -24,6 +24,8 @@ namespace Kotvis.Examples.Edge.Jobs
             var subscriptionId = await _jobDependencies.PublisherApiService.Subscribe(_publisher, _jobDependencies.CancellationToken);
             _publisher.ActualState = ActualPublisherState.Subscribed;
             _publisher.SubscriptionId = subscriptionId;
+
+            Console.Out.WriteLine($"Subscription: {subscriptionId} created for {_publisher.Id}");
         }
     }
 }

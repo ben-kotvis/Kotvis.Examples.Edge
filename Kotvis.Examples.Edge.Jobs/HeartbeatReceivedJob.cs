@@ -26,9 +26,12 @@ namespace Kotvis.Examples.Edge.Jobs
             var existing = _jobDependencies.Module.Publishers.FirstOrDefault(i => i.SubscriptionId == _publisherHeartbeat.SubscriptionId);
             if(existing == default)
             {
-                throw new ApplicationException("Heartbeat was received from an unknown subscription id");
+                Console.Out.WriteLine("Heartbeat was received from an unknown subscription id");
+                return;
             }
 
+
+            Console.Out.WriteLine($"Heartbeat was received for publisher id: {existing.Id}");
             existing.LastMessageTime = DateTimeOffset.UtcNow;
             
             if(existing.ActualState != ActualPublisherState.Healthy)

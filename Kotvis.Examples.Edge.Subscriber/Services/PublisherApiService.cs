@@ -18,9 +18,17 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
             _client = new RestClient();
         }
 
-        public Task CancelSubscription(Publisher publisher, CancellationToken cancellationToken)
+        public async Task CancelSubscription(Publisher publisher, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            var request = new RestRequest(new Uri($"http://{publisher.Host}:{publisher.Port}/api/cancelsubscriptions"), Method.POST);
+            var requestObject = new
+            {
+                SubscriptionId = publisher.SubscriptionId
+            };
+
+            request.AddJsonBody(requestObject);
+
+            await _client.ExecuteAsync(request);
         }
 
         public Task Restart(Publisher publisher, CancellationToken cancellationToken)

@@ -24,6 +24,8 @@ namespace Kotvis.Examples.Edge.Jobs
             await _jobDependencies.PublisherApiService.CancelSubscription(_publisher, _jobDependencies.CancellationToken);
             _publisher.SubscriptionId = default;
             _publisher.ActualState = ActualPublisherState.StandingBy;
+
+            Console.Out.WriteLine($"Cancelling subscription for publisher id: {_publisher.Id}");
         }
     }
 }
