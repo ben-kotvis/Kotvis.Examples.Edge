@@ -8,19 +8,23 @@ namespace scheduler
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using Kotvis.Examples.Edge.Model;
+    using Kotvis.Examples.Edge.Scheduler;
     using Microsoft.Azure.Devices.Client;
     using Microsoft.Azure.Devices.Client.Transport.Mqtt;
+    using Newtonsoft.Json;
 
     class Program
     {
-        static int counter;
-
+        static StateManager stateManager;
+        static CancellationTokenSource cts;
         static void Main(string[] args)
         {
+
+            cts = new CancellationTokenSource();
             Init().Wait();
 
             // Wait until the app unloads or is cancelled
-            var cts = new CancellationTokenSource();
             AssemblyLoadContext.Default.Unloading += (ctx) => cts.Cancel();
             Console.CancelKeyPress += (sender, cpe) => cts.Cancel();
             WhenCancelled(cts.Token).Wait();
@@ -50,8 +54,13 @@ namespace scheduler
             await ioTHubModuleClient.OpenAsync();
             Console.WriteLine("IoT Hub module client initialized.");
 
+
             // Register callback to be called when a message is received by the module
-            await ioTHubModuleClient.SetInputMessageHandlerAsync("input1", PipeMessage, ioTHubModuleClient);
+            await ioTHubModuleClient.SetInputMessageHandlerAsync(Constants.Inputs.Schedule, PipeMessage, ioTHubModuleClient, cts.Token);
+
+
+            stateManager = new StateManager();
+            cts.Token.Register(stateManager.Dispose);
         }
 
         /// <summary>
@@ -60,9 +69,7 @@ namespace scheduler
         /// It prints all the incoming messages.
         /// </summary>
         static async Task<MessageResponse> PipeMessage(Message message, object userContext)
-        {
-            int counterValue = Interlocked.Increment(ref counter);
-
+        {   
             var moduleClient = userContext as ModuleClient;
             if (moduleClient == null)
             {
@@ -71,21 +78,12 @@ namespace scheduler
 
             byte[] messageBytes = message.GetBytes();
             string messageString = Encoding.UTF8.GetString(messageBytes);
-            Console.WriteLine($"Received message: {counterValue}, Body: [{messageString}]");
 
-            if (!string.IsNullOrEmpty(messageString))
-            {
-                using (var pipeMessage = new Message(messageBytes))
-                {
-                    foreach (var prop in message.Properties)
-                    {
-                        pipeMessage.Properties.Add(prop.Key, prop.Value);
-                    }
-                    await moduleClient.SendEventAsync("output1", pipeMessage);
+            var request = JsonConvert.DeserializeObject<SchedulerRequest>(messageString);
 
-                    Console.WriteLine("Received message sent");
-                }
-            }
+            stateManager.AddTask(request, moduleClient, MessageScheduler.Create);
+
+            await moduleClient.CompleteAsync(message);
             return MessageResponse.Completed;
         }
     }

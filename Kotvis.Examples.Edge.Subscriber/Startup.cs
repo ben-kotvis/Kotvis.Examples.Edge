@@ -26,6 +26,7 @@ namespace subscriber
             // Open a connection to the Edge runtime
             ModuleClient ioTHubModuleClient = ModuleClient.CreateFromEnvironmentAsync(settings).GetAwaiter().GetResult();
             ioTHubModuleClient.OpenAsync().GetAwaiter().GetResult();
+            
             services.AddSingleton<ModuleClient>(ioTHubModuleClient);
 
             services.AddSingleton<IEdgeService, EdgeService>();

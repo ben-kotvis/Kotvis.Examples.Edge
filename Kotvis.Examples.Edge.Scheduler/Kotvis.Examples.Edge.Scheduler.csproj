@@ -23,4 +23,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.5" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kotvis.Examples.Edge.Model\Kotvis.Examples.Edge.Model.csproj" />
+  </ItemGroup>
 </Project>

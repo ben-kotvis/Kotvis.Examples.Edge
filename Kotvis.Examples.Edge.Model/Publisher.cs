@@ -109,6 +109,21 @@ namespace Kotvis.Examples.Edge.Model
             }
         }
 
+
+        string _healthScheduleId;
+        public string HealthScheduleId
+        {
+            get => _healthScheduleId;
+            set
+            {
+                if (_healthScheduleId != value)
+                {
+                    _healthScheduleId = value;
+                    IsChanged = true;
+                }
+            }
+        }
+
         public bool IsChanged { get; private set; }
         public void AcceptChanges() => IsChanged = false;
     }

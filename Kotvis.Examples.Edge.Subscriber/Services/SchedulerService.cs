@@ -1,5 +1,6 @@
 ﻿using Kotvis.Examples.Edge.Model;
 using Kotvis.Examples.Edge.Model.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,14 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
 {
     public class SchedulerService : ISchedulerService
     {
-        public Task ScheduleJob(SchedulerRequest schedulerRequest, CancellationToken cancellationToken)
+        private readonly IEdgeService _edgeService;
+        public SchedulerService(IEdgeService edgeService)
         {
-            throw new NotImplementedException();
+            _edgeService = edgeService;
+        }
+        public async Task ScheduleJob(SchedulerRequest schedulerRequest, CancellationToken cancellationToken)
+        {
+            await _edgeService.SendMessageToOutput(Constants.Outputs.Scheduler, JsonConvert.SerializeObject(schedulerRequest), cancellationToken);
         }
     }
 }

@@ -108,15 +108,24 @@
       "properties.desired": {
         "schemaVersion": "1.0",
         "routes": {
-          "pubsubsimulatorToIoTHub": "FROM /messages/modules/pubsubsimulator/outputs/* INTO $upstream",
-          "subscriberToIoTHub": "FROM /messages/modules/subscriber/outputs/* INTO $upstream",
-          "storageToIoTHub": "FROM /messages/modules/storage/outputs/* INTO $upstream",
-          "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/* INTO $upstream",
-          "PubSubSimulatorToIoTHub": "FROM /messages/modules/Kotvis.Examples.Edge.PubSubSimulator/outputs/* INTO $upstream",
-          "SchedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/* INTO $upstream"
+          "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/subscriberinbound INTO BrokeredEndpoint(\"/modules/subscriber/inputs/subscriberinbound\")",
+          "anyToScheduler": "FROM /messages/modules/subscriber/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
+        }
+      }
+    },
+    "scheduler": {
+      "properties.desired": {
+        "Module": {
+          "State": 1,
+          "Publisher-simulatorOne": {
+            "Id": "simulatorOne",
+            "Host": "127.0.0.1",
+            "Port": 8082,
+            "DesiredState": 0
+          }
         }
       }
     }

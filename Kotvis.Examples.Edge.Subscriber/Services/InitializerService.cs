@@ -10,6 +10,7 @@ using System.Threading;
 using Microsoft.Extensions.Logging;
 using Kotvis.Examples.Edge.Model;
 using Kotvis.Examples.Edge.Jobs;
+using Newtonsoft.Json;
 
 namespace Kotvis.Examples.Edge.Subscriber.Services
 {
@@ -31,6 +32,25 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
 
         public async Task Initialize(IApplicationBuilder applicationBuilder)
         {
+            await _moduleClient.SetInputMessageHandlerAsync(Constants.Inputs.SubscriberInbound,
+                new MessageHandler(async (message, userContext) =>
+                    {
+                        var moduleClient = userContext as ModuleClient;
+                        if (moduleClient == null)
+                        {
+                            throw new InvalidOperationException("UserContext doesn't contain " + "expected values");
+                        }
+
+                        byte[] messageBytes = message.GetBytes();
+                        string messageString = Encoding.UTF8.GetString(messageBytes);
+
+                        var healthJob = new HealthCheckJob(_jobDependencyLocator, JsonConvert.DeserializeObject<ElapsedScheduleMessage>(messageString));
+                        await healthJob.Run();
+
+                        await moduleClient.CompleteAsync(message);
+                        return MessageResponse.Completed;
+                    }), _moduleClient, _tokenSource.Token);
+
             await _moduleClient.SetDesiredPropertyUpdateCallbackAsync(
                 new DesiredPropertyUpdateCallback(async (mr, o) =>
                 {

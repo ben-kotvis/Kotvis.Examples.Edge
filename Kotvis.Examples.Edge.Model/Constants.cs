@@ -6,6 +6,16 @@ namespace Kotvis.Examples.Edge.Model
 {
     public class Constants
     {
+        public class Inputs
+        {
+            public const string Schedule = "schedule";
+            public const string SubscriberInbound = "subscriberinbound";
+        }
+        public class Outputs
+        {
+            public const string Scheduler = "scheduler";
+        }
+
         public class TwinKeys
         {
             public const string Module = "Module";
@@ -16,6 +26,7 @@ namespace Kotvis.Examples.Edge.Model
         public class JobNames
         {
             public const string DesiredPropertyChanged = "DesiredPropertyChanged";
+            public const string HealthCheck = "HealthCheck";
         }
     }
 }
