@@ -129,7 +129,7 @@ namespace pubsubsimulator.test
 
             Assert.AreEqual("127.0.0.2", publisher.Host);
             Assert.AreEqual(8088, publisher.Port);
-            Assert.AreEqual(DesiredPublisherState.Online, publisher.DesiredState);
+            Assert.AreEqual(DesiredPublisherState.StandingBy, publisher.DesiredState);
             Assert.AreEqual("filePublisherId", publisher.Id);
         }
 
@@ -147,14 +147,14 @@ namespace pubsubsimulator.test
 
             Assert.AreEqual("127.0.0.2", firstPublisher.Host);
             Assert.AreEqual(8088, firstPublisher.Port);
-            Assert.AreEqual(DesiredPublisherState.Online, firstPublisher.DesiredState);
+            Assert.AreEqual(DesiredPublisherState.StandingBy, firstPublisher.DesiredState);
             Assert.AreEqual("filePublisherId", firstPublisher.Id);
 
             var secondPublisher = _module.Publishers.Last();
 
             Assert.AreEqual("127.0.0.3", secondPublisher.Host);
             Assert.AreEqual(8087, secondPublisher.Port);
-            Assert.AreEqual(DesiredPublisherState.StandingBy, secondPublisher.DesiredState);
+            Assert.AreEqual(DesiredPublisherState.Online, secondPublisher.DesiredState);
             Assert.AreEqual("filePublisherIdTwo", secondPublisher.Id);
         }        
     }
