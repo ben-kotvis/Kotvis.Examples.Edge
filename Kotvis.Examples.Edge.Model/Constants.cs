@@ -27,6 +27,7 @@ namespace Kotvis.Examples.Edge.Model
         {
             public const string DesiredPropertyChanged = "DesiredPropertyChanged";
             public const string HealthCheck = "HealthCheck";
+            public const string PubSubHeartbeatJob = "PubSubHeartbeatJob";
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Kotvis.Examples.Edge.Model;
+using Kotvis.Examples.Edge.PubSubSimulator.Models;
+using Microsoft.AspNetCore.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,52 +9,23 @@ using System.Threading.Tasks;
 
 namespace Kotvis.Examples.Edge.PubSubSimulator
 {
-    public class StateManager : IDisposable
+    public class StateManager 
     {
-        private readonly List<Task> _tasks;
-        private readonly IDictionary<string, CancellationTokenSource> _tokenDictionary;
+        private readonly IDictionary<string, SubscribeRequest> _subscriptionLookup;
 
         public StateManager()
         {
-            _tasks = new List<Task>();
-            _tokenDictionary = new Dictionary<string, CancellationTokenSource>();
+            _subscriptionLookup = new Dictionary<string, SubscribeRequest>();
         }
 
-        public void AddTask(string id, Action<CancellationToken> action)
+        public void AddTask(string id, SubscribeRequest subscribeRequest)
         {
-            var tokenSource = new CancellationTokenSource();
-            _tokenDictionary.Add(id, tokenSource);
-            _tasks.Add(Task.Run(() => action(tokenSource.Token), tokenSource.Token));
+            _subscriptionLookup.Add(id, subscribeRequest);
         }
 
-        public void CancelTask(string id)
+        public SubscribeRequest GetRequest(string id)
         {
-            _tokenDictionary[id].Cancel();
-            _tokenDictionary.Remove(id);
-
-            int numberOfTasks = _tasks.Count - 1;
-            for (int i = numberOfTasks; i > -1; i--)
-            {
-                var task = _tasks[i];
-                if (task.IsCompleted)
-                {
-                    task.Dispose();
-                    _tasks.RemoveAt(i);
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            foreach(var item in _tokenDictionary)
-            {
-                item.Value.Cancel();
-            }
-
-            foreach(var item in _tasks)
-            {   
-                item.Dispose();
-            }
+            return _subscriptionLookup[id];
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Kotvis.Examples.Edge.Jobs
             {
                 OutputName = Constants.Inputs.SubscriberInbound,
                 Repeat = true,
-                RunTime = TimeSpan.FromSeconds(60),
+                RunTime = TimeSpan.FromSeconds(30),
                 Context = context
             };
 

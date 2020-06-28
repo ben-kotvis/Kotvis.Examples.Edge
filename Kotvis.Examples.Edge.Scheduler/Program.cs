@@ -63,11 +63,6 @@ namespace scheduler
             cts.Token.Register(stateManager.Dispose);
         }
 
-        /// <summary>
-        /// This method is called whenever the module is sent a message from the EdgeHub. 
-        /// It just pipe the messages without any change.
-        /// It prints all the incoming messages.
-        /// </summary>
         static async Task<MessageResponse> PipeMessage(Message message, object userContext)
         {   
             var moduleClient = userContext as ModuleClient;

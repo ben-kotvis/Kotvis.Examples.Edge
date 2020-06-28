@@ -109,7 +109,9 @@
         "schemaVersion": "1.0",
         "routes": {
           "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/subscriberinbound INTO BrokeredEndpoint(\"/modules/subscriber/inputs/subscriberinbound\")",
-          "anyToScheduler": "FROM /messages/modules/subscriber/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")"
+          "schedulerToPubSubSimulator": "FROM /messages/modules/scheduler/outputs/subscriberinbound INTO BrokeredEndpoint(\"/modules/pubsubsimulator/inputs/subscriberinbound\")",
+          "SubscriberToScheduler": "FROM /messages/modules/subscriber/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")",
+          "PubSubToScheduler": "FROM /messages/modules/pubsubsimulator/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
