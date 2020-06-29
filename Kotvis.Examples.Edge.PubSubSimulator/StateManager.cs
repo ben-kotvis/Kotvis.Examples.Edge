@@ -11,19 +11,24 @@ namespace Kotvis.Examples.Edge.PubSubSimulator
 {
     public class StateManager 
     {
-        private readonly IDictionary<string, SubscribeRequest> _subscriptionLookup;
+        private readonly IDictionary<string, Subscription> _subscriptionLookup;
 
         public StateManager()
         {
-            _subscriptionLookup = new Dictionary<string, SubscribeRequest>();
+            _subscriptionLookup = new Dictionary<string, Subscription>();
         }
 
-        public void AddTask(string id, SubscribeRequest subscribeRequest)
+        public void AddSchedule(string id, Subscription subscribeRequest)
         {
             _subscriptionLookup.Add(id, subscribeRequest);
         }
 
-        public SubscribeRequest GetRequest(string id)
+        public void Cancel(string id)
+        {
+            _subscriptionLookup.Remove(id);
+        }
+
+        public Subscription GetRequest(string id)
         {
             return _subscriptionLookup[id];
         }

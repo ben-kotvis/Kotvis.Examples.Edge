@@ -25,31 +25,35 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
         [HttpPost]
         public async Task<CreatedResult> Post(SubscribeRequest subscribeRequest, CancellationToken cancellationToken)
         {
-            var id = Guid.NewGuid().ToString();
+            var subscriptionId = Guid.NewGuid().ToString();
             var scheduleId = Guid.NewGuid().ToString();
             var heartBeatScheduleReqeust = new SchedulerRequest();
-            heartBeatScheduleReqeust.OutputName = Constants.Inputs.SubscriberInbound;
+            heartBeatScheduleReqeust.OutputName = Constants.Outputs.PubSubSimulator;
             heartBeatScheduleReqeust.Repeat = true;
             heartBeatScheduleReqeust.RunTime = TimeSpan.FromSeconds(15);
             heartBeatScheduleReqeust.Context = new ElapsedScheduleMessage()
             {
-                Context = id,
+                Context = subscriptionId,
                 JobName = Constants.JobNames.PubSubHeartbeatJob,
                 ScheduleId = scheduleId
             };
 
             await _schedulerService.ScheduleJob(heartBeatScheduleReqeust, cancellationToken);
 
-            _stateManager.AddTask(id, subscribeRequest);
-                
-                //$"http://{subscribeRequest.SubscriberAddress}:{subscribeRequest.SubscriberPort}/api/heartbeats", id, token));
+            var request = new Subscription()
+            {
+                Request = subscribeRequest,
+                ScheduleId = scheduleId
+            };
+
+            _stateManager.AddSchedule(subscriptionId, request);                
 
             var response = new PubSubSimulator.Models.SubscribeResponse()
             {
-                SubscriptionId = id
+                SubscriptionId = subscriptionId
             };
 
-            Console.Out.WriteLine($"Subscription: {id} created");
+            Console.Out.WriteLine($"Subscription: {subscriptionId} created");
 
             return Created("/hello", response);
         }

@@ -1,8 +1,11 @@
-﻿using Kotvis.Examples.Edge.PubSubSimulator.Models;
+﻿using Kotvis.Examples.Edge.Model;
+using Kotvis.Examples.Edge.Model.Interfaces;
+using Kotvis.Examples.Edge.PubSubSimulator.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
@@ -12,15 +15,26 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
     public class CancelSubscriptionsController : ControllerBase
     {
         private readonly StateManager _stateManager;
-        public CancelSubscriptionsController(StateManager stateManager)
+        private readonly ISchedulerService _schedulerService;
+        public CancelSubscriptionsController(StateManager stateManager, ISchedulerService schedulerService)
         {
             _stateManager = stateManager;
+            _schedulerService = schedulerService;
         }
 
         [HttpPost]
-        public AcceptedResult Post(CancelSubscriptionRequest cancelRequest)
+        public async Task<AcceptedResult> Post(CancelSubscriptionRequest cancelRequest, CancellationToken cancellationToken)
         {
-            //_stateManager.CancelTask(cancelRequest.SubscriptionId);
+            var originalRequest = _stateManager.GetRequest(cancelRequest.SubscriptionId);
+            var schedulerCancelRequest = new SchedulerCancelRequest()
+            {
+                ScheduleId = originalRequest.ScheduleId
+            };
+
+            await _schedulerService.CancelSchedule(schedulerCancelRequest, cancellationToken);
+
+            _stateManager.Cancel(cancelRequest.SubscriptionId);
+
             Console.Out.WriteLine($"Subscription: {cancelRequest.SubscriptionId} cancelled");
             return Accepted();
         }

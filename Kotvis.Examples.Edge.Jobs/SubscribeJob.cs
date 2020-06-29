@@ -22,8 +22,6 @@ namespace Kotvis.Examples.Edge.Jobs
 
         public async Task Run()
         {
-            Monitor.Enter(_publisher);
-
             var subscriptionId = await _jobDependencies.PublisherApiService.Subscribe(_publisher, _jobDependencies.CancellationToken);
             _publisher.ActualState = ActualPublisherState.Subscribed;
             _publisher.SubscriptionId = subscriptionId;
@@ -37,7 +35,7 @@ namespace Kotvis.Examples.Edge.Jobs
 
             var schedulerRequest = new SchedulerRequest()
             {
-                OutputName = Constants.Inputs.SubscriberInbound,
+                OutputName = Constants.Outputs.Subscriber,
                 Repeat = true,
                 RunTime = TimeSpan.FromSeconds(30),
                 Context = context
@@ -48,7 +46,6 @@ namespace Kotvis.Examples.Edge.Jobs
             _publisher.HealthScheduleId = context.ScheduleId;
 
             Console.Out.WriteLine($"Subscription: {subscriptionId} created for {_publisher.Id}");
-            Monitor.Exit(_publisher);
         }
     }
 }

@@ -18,7 +18,20 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
         }
         public async Task ScheduleJob(SchedulerRequest schedulerRequest, CancellationToken cancellationToken)
         {
-            await _edgeService.SendMessageToOutput(Constants.Outputs.Scheduler, JsonConvert.SerializeObject(schedulerRequest), cancellationToken);
+            await _edgeService.SendMessageToOutput(
+                Constants.Outputs.Scheduler, 
+                JsonConvert.SerializeObject(schedulerRequest), 
+                cancellationToken,
+                NameValue.Create(Constants.PropertyNames.RequestType, Constants.Scheduler.ScheduleRequest));
+        }
+
+        public async Task CancelSchedule(SchedulerCancelRequest schedulerCancelRequest, CancellationToken cancellationToken)
+        {
+            await _edgeService.SendMessageToOutput(
+                Constants.Outputs.Scheduler, 
+                JsonConvert.SerializeObject(schedulerCancelRequest), 
+                cancellationToken, 
+                NameValue.Create(Constants.PropertyNames.RequestType, Constants.Scheduler.CancelRequest));
         }
     }
 }

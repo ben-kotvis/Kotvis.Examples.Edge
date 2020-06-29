@@ -6,6 +6,17 @@ namespace Kotvis.Examples.Edge.Model
 {
     public class Constants
     {
+        public class Scheduler
+        {
+            public const string ScheduleRequest = "schedule";
+            public const string CancelRequest = "cancel";
+        }
+
+        public class PropertyNames
+        {
+            public const string RequestType = "request-type";
+        }
+
         public class Inputs
         {
             public const string Schedule = "schedule";
@@ -14,6 +25,8 @@ namespace Kotvis.Examples.Edge.Model
         public class Outputs
         {
             public const string Scheduler = "scheduler";
+            public const string Subscriber = "to-subscriber";
+            public const string PubSubSimulator = "to-pubsubsimulator";
         }
 
         public class TwinKeys

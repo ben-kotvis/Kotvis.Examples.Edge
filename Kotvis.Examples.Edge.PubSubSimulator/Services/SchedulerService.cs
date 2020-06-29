@@ -22,6 +22,15 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Services
         {
             var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(schedulerRequest));
             var message = new Message(bytes);
+            message.Properties.Add(Constants.PropertyNames.RequestType, Constants.Scheduler.ScheduleRequest);
+            await _moduleClient.SendEventAsync(Constants.Outputs.Scheduler, message, cancellationToken);
+        }
+
+        public async Task CancelSchedule(SchedulerCancelRequest schedulerCancelRequest, CancellationToken cancellationToken)
+        {
+            var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(schedulerCancelRequest));
+            var message = new Message(bytes);
+            message.Properties.Add(Constants.PropertyNames.RequestType, Constants.Scheduler.CancelRequest);
             await _moduleClient.SendEventAsync(Constants.Outputs.Scheduler, message, cancellationToken);
         }
     }

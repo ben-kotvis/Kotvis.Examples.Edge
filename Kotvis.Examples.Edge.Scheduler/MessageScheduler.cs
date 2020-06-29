@@ -7,33 +7,61 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Kotvis.Examples.Edge.Scheduler
 {
     public class MessageScheduler
     {
-        public static async Task Create(SchedulerRequest request, ModuleClient moduleClient, CancellationToken cancellation)
+        public static async Task Create(Module module, ModuleClient moduleClient, CancellationToken cancellation)
         {
             do
             {
+                await Task.Delay(TimeSpan.FromSeconds(1), cancellation);
+
+                var currentDateTime = DateTimeOffset.Now;
+
+                var completedScheduleIds = new List<string>();
                 try
                 {
-                    await Task.Delay(request.RunTime, cancellation);
+                    foreach (var schedule in module.Schedules.Where(i => i.NextRunTime.Subtract(currentDateTime) < TimeSpan.FromSeconds(1) || i.NextRunTime < currentDateTime))
+                    {
+                        var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(schedule.Request.Context));
+                        var message = new Message(bytes);
+                        Console.WriteLine($"Sending message to output for schedule id: {schedule.Request.Context.ScheduleId}.");
+                        var messageTime = DateTimeOffset.Now;
+                        await moduleClient.SendEventAsync(schedule.Request.OutputName, message, cancellation);
 
-                    var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(request.Context));
+                        if (schedule.Request.Repeat)
+                        {
+                            Monitor.Enter(module);
+                            schedule.Advance(messageTime);
+                            Monitor.Exit(module);
+                        }
+                        else
+                        {
+                            completedScheduleIds.Add(schedule.Request.Context.ScheduleId);
+                        }
+                    }
 
-                    var message = new Message(bytes);
-
-
-                    Console.WriteLine($"Sending message to output for schedule id: {request.Context.ScheduleId}.");
-                    await moduleClient.SendEventAsync(request.OutputName, message, cancellation);
+                    if (completedScheduleIds.Any())
+                    {
+                        Monitor.Enter(module);
+                        module.Schedules.RemoveAll(i => completedScheduleIds.Contains(i.Request.Context.ScheduleId));
+                        Monitor.Exit(module);
+                    }
                 }
-                catch(TaskCanceledException)
+                catch (TaskCanceledException ex)
                 {
-                    Console.WriteLine($"Schedule Id: {request.Context.ScheduleId} was cancelled.");
+                    Console.WriteLine($"Scheduler cancelled {ex}");
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Scheduler error {ex}");
+                }
+
             }
-            while (!cancellation.IsCancellationRequested && request.Repeat);
+            while (!cancellation.IsCancellationRequested);
         }
     }
 }

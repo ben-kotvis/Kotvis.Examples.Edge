@@ -13,11 +13,14 @@ namespace scheduler
     using Microsoft.Azure.Devices.Client;
     using Microsoft.Azure.Devices.Client.Transport.Mqtt;
     using Newtonsoft.Json;
+    using Scheduler = Kotvis.Examples.Edge.Scheduler;
 
     class Program
     {
-        static StateManager stateManager;
+        //static StateManager stateManager;
         static CancellationTokenSource cts;
+        static Scheduler.Module module;
+        static Task scheduleTask;
         static void Main(string[] args)
         {
 
@@ -36,7 +39,11 @@ namespace scheduler
         public static Task WhenCancelled(CancellationToken cancellationToken)
         {
             var tcs = new TaskCompletionSource<bool>();
-            cancellationToken.Register(s => ((TaskCompletionSource<bool>)s).SetResult(true), tcs);
+            cancellationToken.Register(s =>
+            {
+                scheduleTask.Dispose();
+                ((TaskCompletionSource<bool>)s).SetResult(true);
+            }, tcs);
             return tcs.Task;
         }
 
@@ -58,12 +65,12 @@ namespace scheduler
             // Register callback to be called when a message is received by the module
             await ioTHubModuleClient.SetInputMessageHandlerAsync(Constants.Inputs.Schedule, PipeMessage, ioTHubModuleClient, cts.Token);
 
+            module = new Scheduler.Module();
 
-            stateManager = new StateManager();
-            cts.Token.Register(stateManager.Dispose);
+            scheduleTask = MessageScheduler.Create(module, ioTHubModuleClient, cts.Token);
         }
 
-        static async Task<MessageResponse> PipeMessage(Message message, object userContext)
+        static Task<MessageResponse> PipeMessage(Message message, object userContext)
         {   
             var moduleClient = userContext as ModuleClient;
             if (moduleClient == null)
@@ -74,12 +81,24 @@ namespace scheduler
             byte[] messageBytes = message.GetBytes();
             string messageString = Encoding.UTF8.GetString(messageBytes);
 
-            var request = JsonConvert.DeserializeObject<SchedulerRequest>(messageString);
+            var requestType = message.Properties[Constants.PropertyNames.RequestType];
 
-            stateManager.AddTask(request, moduleClient, MessageScheduler.Create);
-
-            await moduleClient.CompleteAsync(message);
-            return MessageResponse.Completed;
+            switch (requestType)
+            {
+                case Constants.Scheduler.ScheduleRequest:
+                    var request = JsonConvert.DeserializeObject<SchedulerRequest>(messageString);
+                    Monitor.Enter(module);
+                    module.Schedules.Add(new Schedule(request));
+                    Monitor.Exit(module);
+                    break;
+                case Constants.Scheduler.CancelRequest:
+                    var cancelRequest = JsonConvert.DeserializeObject<SchedulerCancelRequest>(messageString);
+                    Monitor.Enter(module);
+                    module.Schedules.RemoveAll(i => i.Request.Context.ScheduleId == cancelRequest.ScheduleId); 
+                    Monitor.Exit(module);
+                    break;
+            };
+            return Task.FromResult(MessageResponse.Completed);
         }
     }
 }

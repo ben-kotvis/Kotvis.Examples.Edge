@@ -28,7 +28,7 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Jobs
         {
             var subscriberRequest = _stateManager.GetRequest(_elapsedScheduleMessage.Context);
 
-            RestRequest request = new RestRequest(new Uri($"http://{subscriberRequest.SubscriberAddress}:{subscriberRequest.SubscriberPort}/api/heartbeats"));
+            RestRequest request = new RestRequest(new Uri($"http://{subscriberRequest.Request.SubscriberAddress}:{subscriberRequest.Request.SubscriberPort}/api/heartbeats"));
 
             var subscriptionHeartbeat = new PublisherSubscriptionHeartbeat()
             {

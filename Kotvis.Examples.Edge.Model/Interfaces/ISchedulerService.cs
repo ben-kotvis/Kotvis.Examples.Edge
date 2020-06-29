@@ -9,5 +9,6 @@ namespace Kotvis.Examples.Edge.Model.Interfaces
     public interface ISchedulerService
     {
         Task ScheduleJob(SchedulerRequest schedulerRequest, CancellationToken cancellationToken);
+        Task CancelSchedule(SchedulerCancelRequest schedulerCancelRequest, CancellationToken cancellationToken);
     }
 }
