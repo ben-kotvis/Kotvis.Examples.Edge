@@ -56,12 +56,10 @@ namespace Kotvis.Examples.Edge.Jobs
         {
             var publisherId = item.Name.Replace(Constants.TwinKeys.PublisherPrefix, string.Empty);
             var modulePublisher = _jobDependencies.Module.Publishers.FirstOrDefault(i => i.Id == publisherId);
-            bool isNew = false;
 
             if(modulePublisher == default)
             {
                 modulePublisher = new Publisher() { Id = publisherId };
-                isNew = true;
                 _jobDependencies.Module.Publishers.Add(modulePublisher);
             }
             try
@@ -72,12 +70,7 @@ namespace Kotvis.Examples.Edge.Jobs
                 modulePublisher.Port = publisher.Port;
                 modulePublisher.UserName = publisher.UserName;
                 modulePublisher.Password = publisher.Password;
-                modulePublisher.ActualState = ActualPublisherState.Unknown;
-
-                if(isNew)
-                {
-                    modulePublisher.AcceptChanges();
-                }
+                modulePublisher.ActualState = ActualPublisherState.Default;
             }
             catch(Exception ex)
             {

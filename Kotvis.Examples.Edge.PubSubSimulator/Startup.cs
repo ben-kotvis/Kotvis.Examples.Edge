@@ -55,7 +55,16 @@ namespace pubsubsimulator
                     string messageString = Encoding.UTF8.GetString(messageBytes);
 
                     var request = JsonConvert.DeserializeObject<ElapsedScheduleMessage>(messageString);
-                    var job = new HeartbeatScheduleElapsedJob(stateManager, request, tokenSource.Token);
+                    IJob job = default;
+                    switch(request.JobName)
+                    {
+                        case Constants.JobNames.PubSubTelemetryJob:
+                            job = new TelemetryScheduleElapsedJob(stateManager, request, tokenSource.Token);
+                            break;
+                        case Constants.JobNames.PubSubHeartbeatJob:
+                            job = new HeartbeatScheduleElapsedJob(stateManager, request, tokenSource.Token);
+                            break;
+                    }
                     await job.Run();
                     return MessageResponse.Completed;
 

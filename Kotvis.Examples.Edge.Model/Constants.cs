@@ -27,6 +27,7 @@ namespace Kotvis.Examples.Edge.Model
             public const string Scheduler = "scheduler";
             public const string Subscriber = "to-subscriber";
             public const string PubSubSimulator = "to-pubsubsimulator";
+            public const string TelemetryUpstream = "to-upstream";
         }
 
         public class TwinKeys
@@ -41,6 +42,7 @@ namespace Kotvis.Examples.Edge.Model
             public const string DesiredPropertyChanged = "DesiredPropertyChanged";
             public const string HealthCheck = "HealthCheck";
             public const string PubSubHeartbeatJob = "PubSubHeartbeatJob";
+            public const string PubSubTelemetryJob = "PubSubTelemetryJob";
         }
     }
 }

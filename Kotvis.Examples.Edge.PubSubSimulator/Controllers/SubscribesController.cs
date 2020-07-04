@@ -26,19 +26,10 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
         public async Task<CreatedResult> Post(SubscribeRequest subscribeRequest, CancellationToken cancellationToken)
         {
             var subscriptionId = Guid.NewGuid().ToString();
-            var scheduleId = Guid.NewGuid().ToString();
-            var heartBeatScheduleReqeust = new SchedulerRequest();
-            heartBeatScheduleReqeust.OutputName = Constants.Outputs.PubSubSimulator;
-            heartBeatScheduleReqeust.Repeat = true;
-            heartBeatScheduleReqeust.RunTime = TimeSpan.FromSeconds(15);
-            heartBeatScheduleReqeust.Context = new ElapsedScheduleMessage()
-            {
-                Context = subscriptionId,
-                JobName = Constants.JobNames.PubSubHeartbeatJob,
-                ScheduleId = scheduleId
-            };
+            var scheduleId = Guid.NewGuid().ToString(); 
 
-            await _schedulerService.ScheduleJob(heartBeatScheduleReqeust, cancellationToken);
+            await _schedulerService.ScheduleJob(CreateRequest(subscriptionId, scheduleId, Constants.JobNames.PubSubHeartbeatJob), cancellationToken);
+            await _schedulerService.ScheduleJob(CreateRequest(subscriptionId, scheduleId, Constants.JobNames.PubSubTelemetryJob), cancellationToken);
 
             var request = new Subscription()
             {
@@ -56,6 +47,21 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
             Console.Out.WriteLine($"Subscription: {subscriptionId} created");
 
             return Created("/hello", response);
+        }
+
+        private SchedulerRequest CreateRequest(string subscriptionId, string scheduleId, string jobName)
+        {
+            var scheduleReqeust = new SchedulerRequest();
+            scheduleReqeust.OutputName = Constants.Outputs.PubSubSimulator;
+            scheduleReqeust.Repeat = true;
+            scheduleReqeust.RunTime = TimeSpan.FromSeconds(15);
+            scheduleReqeust.Context = new ElapsedScheduleMessage()
+            {
+                Context = subscriptionId,
+                JobName = jobName,
+                ScheduleId = scheduleId
+            };
+            return scheduleReqeust;
         }
     }
 }
