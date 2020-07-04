@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SchedulerModel = Kotvis.Edge.Scheduler.Model;
 
 namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
 {
@@ -26,7 +27,7 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
         public async Task<AcceptedResult> Post(CancelSubscriptionRequest cancelRequest, CancellationToken cancellationToken)
         {
             var originalRequest = _stateManager.GetRequest(cancelRequest.SubscriptionId);
-            var schedulerCancelRequest = new SchedulerCancelRequest()
+            var schedulerCancelRequest = new SchedulerModel.CancelScheduleRequest()
             {
                 ScheduleId = originalRequest.ScheduleId
             };

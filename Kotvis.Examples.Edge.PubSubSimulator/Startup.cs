@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using SchedulerModel = Kotvis.Edge.Scheduler.Model;
 
 namespace pubsubsimulator
 {
@@ -54,7 +55,7 @@ namespace pubsubsimulator
                     byte[] messageBytes = m.GetBytes();
                     string messageString = Encoding.UTF8.GetString(messageBytes);
 
-                    var request = JsonConvert.DeserializeObject<ElapsedScheduleMessage>(messageString);
+                    var request = JsonConvert.DeserializeObject<SchedulerModel.ElapsedScheduleMessage>(messageString);
                     var job = new HeartbeatScheduleElapsedJob(stateManager, request, tokenSource.Token);
                     await job.Run();
                     return MessageResponse.Completed;

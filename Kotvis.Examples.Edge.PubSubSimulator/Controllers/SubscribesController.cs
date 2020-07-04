@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SchedulerModel = Kotvis.Edge.Scheduler.Model;
 
 namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
 {
@@ -27,15 +28,17 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
         {
             var subscriptionId = Guid.NewGuid().ToString();
             var scheduleId = Guid.NewGuid().ToString();
-            var heartBeatScheduleReqeust = new SchedulerRequest();
+
+            var heartBeatScheduleReqeust = new SchedulerModel.SchedulerRequest();
             heartBeatScheduleReqeust.OutputName = Constants.Outputs.PubSubSimulator;
             heartBeatScheduleReqeust.Repeat = true;
             heartBeatScheduleReqeust.RunTime = TimeSpan.FromSeconds(15);
-            heartBeatScheduleReqeust.Context = new ElapsedScheduleMessage()
+            heartBeatScheduleReqeust.ScheduleId = scheduleId;
+            heartBeatScheduleReqeust.Context = new SchedulerModel.ElapsedScheduleMessage()
             {
                 Context = subscriptionId,
                 JobName = Constants.JobNames.PubSubHeartbeatJob,
-                ScheduleId = scheduleId
+                CorrelationId = subscriptionId
             };
 
             await _schedulerService.ScheduleJob(heartBeatScheduleReqeust, cancellationToken);

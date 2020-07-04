@@ -30,7 +30,6 @@ namespace Kotvis.Examples.Edge.Jobs
                 return;
             }
 
-
             Console.Out.WriteLine($"Heartbeat was received for publisher id: {existing.Id}");
             existing.LastMessageTime = DateTimeOffset.UtcNow;
             

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Kotvis.Examples.Edge.Model;
 using Kotvis.Examples.Edge.Jobs;
 using Newtonsoft.Json;
+using SchedulerModel = Kotvis.Edge.Scheduler.Model;
 
 namespace Kotvis.Examples.Edge.Subscriber.Services
 {
@@ -44,7 +45,7 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
                         byte[] messageBytes = message.GetBytes();
                         string messageString = Encoding.UTF8.GetString(messageBytes);
 
-                        var healthJob = new HealthCheckJob(_jobDependencyLocator, JsonConvert.DeserializeObject<ElapsedScheduleMessage>(messageString));
+                        var healthJob = new HealthCheckJob(_jobDependencyLocator, JsonConvert.DeserializeObject<SchedulerModel.ElapsedScheduleMessage>(messageString));
                         await healthJob.Run();
 
                         await moduleClient.CompleteAsync(message);

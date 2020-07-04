@@ -7,6 +7,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Threading;
+using SchedulerModel = Kotvis.Edge.Scheduler.Model;
 
 namespace Kotvis.Examples.Edge.Jobs
 {
@@ -26,24 +27,25 @@ namespace Kotvis.Examples.Edge.Jobs
             _publisher.ActualState = ActualPublisherState.Subscribed;
             _publisher.SubscriptionId = subscriptionId;
 
-            var context = new ElapsedScheduleMessage()
+            var context = new SchedulerModel.ElapsedScheduleMessage()
             {
                 Context = subscriptionId,
-                ScheduleId = Guid.NewGuid().ToString(),
-                JobName = Constants.JobNames.HealthCheck
+                JobName = Constants.JobNames.HealthCheck,
+                CorrelationId = subscriptionId
             };
 
-            var schedulerRequest = new SchedulerRequest()
+            var schedulerRequest = new SchedulerModel.SchedulerRequest()
             {
                 OutputName = Constants.Outputs.Subscriber,
                 Repeat = true,
                 RunTime = TimeSpan.FromSeconds(30),
-                Context = context
+                Context = context,
+                ScheduleId = Guid.NewGuid().ToString(),
             };
 
             await _jobDependencies.SchedulerService.ScheduleJob(schedulerRequest, _jobDependencies.CancellationToken);
 
-            _publisher.HealthScheduleId = context.ScheduleId;
+            _publisher.HealthScheduleId = schedulerRequest.ScheduleId;
 
             Console.Out.WriteLine($"Subscription: {subscriptionId} created for {_publisher.Id}");
         }

@@ -48,12 +48,16 @@ namespace Kotvis.Examples.Edge.Jobs
 
         private IJob CreateStandingByJob(Publisher publisher)
         {
-            if (publisher.ActualState == ActualPublisherState.StandingBy || publisher.ActualState == ActualPublisherState.Removed)
+            switch(publisher.ActualState)
             {
-                return default;
+                case ActualPublisherState.Default:
+                case ActualPublisherState.StandingBy:
+                case ActualPublisherState.Removed:
+                    return default;
+                default:
+                    //credentials or host information changed so cancel
+                    return new CancelSubscriptionJob(_jobDependencies, publisher);
             }
-            //credentials or host information changed so cancel
-            return new CancelSubscriptionJob(_jobDependencies, publisher);
         }
 
         private IJob CreateRemovedJob(Publisher publisher)

@@ -8,14 +8,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using SchedulerModel = Kotvis.Edge.Scheduler.Model;
 
 namespace Kotvis.Examples.Edge.Jobs
 {
     public class HealthCheckJob : IJob
     {
         private readonly JobDependencyLocator _jobDependencies;
-        private readonly ElapsedScheduleMessage _elapsedScheduleMessage;
-        public HealthCheckJob(JobDependencyLocator jobDependencies, ElapsedScheduleMessage elapsedScheduleMessage)
+        private readonly SchedulerModel.ElapsedScheduleMessage _elapsedScheduleMessage;
+        public HealthCheckJob(JobDependencyLocator jobDependencies, SchedulerModel.ElapsedScheduleMessage elapsedScheduleMessage)
         {
             _jobDependencies = jobDependencies;
             _elapsedScheduleMessage = elapsedScheduleMessage;
@@ -23,7 +24,7 @@ namespace Kotvis.Examples.Edge.Jobs
 
         public async Task Run()
         {
-            Console.Out.WriteLine($"Health check job was received for schedule id: {_elapsedScheduleMessage.ScheduleId}");
+            Console.Out.WriteLine($"Health check job was received for subsccription id: {_elapsedScheduleMessage.CorrelationId}");
 
         }
 

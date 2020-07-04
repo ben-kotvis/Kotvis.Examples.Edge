@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kotvis.Edge.Scheduler.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,6 @@ namespace Kotvis.Examples.Edge.Model.Interfaces
     public interface ISchedulerService
     {
         Task ScheduleJob(SchedulerRequest schedulerRequest, CancellationToken cancellationToken);
-        Task CancelSchedule(SchedulerCancelRequest schedulerCancelRequest, CancellationToken cancellationToken);
+        Task CancelSchedule(CancelScheduleRequest schedulerCancelRequest, CancellationToken cancellationToken);
     }
 }

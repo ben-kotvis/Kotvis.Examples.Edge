@@ -5,6 +5,7 @@ using Microsoft.Azure.Devices.Shared;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
@@ -64,6 +65,5 @@ namespace pubsubsimulator.test
             await job.Run();
             Assert.AreEqual(ActualPublisherState.StandingBy, publisher.ActualState);
         }
-
     }
 }

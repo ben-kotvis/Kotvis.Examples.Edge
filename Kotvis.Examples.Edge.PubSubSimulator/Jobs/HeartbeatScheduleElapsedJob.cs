@@ -7,16 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SchedulerModel = Kotvis.Edge.Scheduler.Model;
 
 namespace Kotvis.Examples.Edge.PubSubSimulator.Jobs
 {
     public class HeartbeatScheduleElapsedJob : IJob
     {
-        private readonly ElapsedScheduleMessage _elapsedScheduleMessage;
+        private readonly SchedulerModel.ElapsedScheduleMessage _elapsedScheduleMessage;
         private readonly StateManager _stateManager;
         private readonly RestClient _client;
         private readonly CancellationToken _cancellationToken;
-        public HeartbeatScheduleElapsedJob(StateManager stateManager, ElapsedScheduleMessage elapsedScheduleMessage, CancellationToken cancellationToken)
+        public HeartbeatScheduleElapsedJob(StateManager stateManager, SchedulerModel.ElapsedScheduleMessage elapsedScheduleMessage, CancellationToken cancellationToken)
         {
             _client = new RestClient();
             _elapsedScheduleMessage = elapsedScheduleMessage;
@@ -26,6 +27,8 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Jobs
 
         public async Task Run()
         {
+            Console.Out.WriteLine($"Heartbeat schedule elapsed for CorrelationId: {_elapsedScheduleMessage.CorrelationId}");
+
             var subscriberRequest = _stateManager.GetRequest(_elapsedScheduleMessage.Context);
 
             RestRequest request = new RestRequest(new Uri($"http://{subscriberRequest.Request.SubscriberAddress}:{subscriberRequest.Request.SubscriberPort}/api/heartbeats"));

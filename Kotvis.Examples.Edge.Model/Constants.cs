@@ -21,6 +21,8 @@ namespace Kotvis.Examples.Edge.Model
         {
             public const string Schedule = "schedule";
             public const string SubscriberInbound = "subscriberinbound";
+            public const string CancelSchedule = "cancel-schedule";
+
         }
         public class Outputs
         {

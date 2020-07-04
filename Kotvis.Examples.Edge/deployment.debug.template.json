@@ -97,7 +97,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULEDIR<../Kotvis.Examples.Edge.Scheduler>.debug}",
+              "image": "localhost:5000/schedulingmodule:0.0.6-amd64",
               "createOptions": {}
             }
           }
@@ -108,10 +108,13 @@
       "properties.desired": {
         "schemaVersion": "1.0",
         "routes": {
+          "schedulerToIoTUpstream": "FROM /messages/modules/scheduler/outputs/to-upstream INTO $upstream",
           "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/to-subscriber INTO BrokeredEndpoint(\"/modules/subscriber/inputs/subscriberinbound\")",
           "schedulerToPubSubSimulator": "FROM /messages/modules/scheduler/outputs/to-pubsubsimulator INTO BrokeredEndpoint(\"/modules/pubsubsimulator/inputs/subscriberinbound\")",
           "SubscriberToScheduler": "FROM /messages/modules/subscriber/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")",
-          "PubSubToScheduler": "FROM /messages/modules/pubsubsimulator/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")"
+          "SubscriberToCancelScheduler": "FROM /messages/modules/subscriber/outputs/cancel-schedule INTO BrokeredEndpoint(\"/modules/scheduler/inputs/cancel-schedule\")",
+          "PubSubToScheduler": "FROM /messages/modules/pubsubsimulator/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")",
+          "PubSubToCancelScheduler": "FROM /messages/modules/pubsubsimulator/outputs/cancel-schedule INTO BrokeredEndpoint(\"/modules/scheduler/inputs/cancel-schedule\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
