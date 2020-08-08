@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Client.Transport.Mqtt;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -17,7 +18,8 @@ using System.Threading;
 namespace pubsubsimulator
 {
     public class Startup
-    { 
+    {
+
         public void ConfigureServices(IServiceCollection services)
         {
             CancellationTokenSource tokenSource = new CancellationTokenSource();

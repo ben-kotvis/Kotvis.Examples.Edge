@@ -1,5 +1,4 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim-arm32v7 AS base
-EXPOSE 8081
 
 RUN apt-get update || true && \
     apt-get install -y --no-install-recommends unzip procps && \
@@ -13,10 +12,10 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster-arm32v7 AS build-env
 WORKDIR /app
 
 COPY . .
-RUN dotnet restore ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj
+RUN dotnet restore ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj -r linux-arm 
 
 COPY . ./
-RUN dotnet publish ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj -c Release -o out 
+RUN dotnet publish ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj -c Release -o out -r linux-arm 
 
 FROM base
 WORKDIR /app

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Kotvis.Examples.Edge.Jobs
@@ -24,8 +25,9 @@ namespace Kotvis.Examples.Edge.Jobs
 
         public async Task Run()
         {
+
             var existing = _jobDependencies.Module.Publishers.FirstOrDefault(i => i.SubscriptionId == _telemetryMessage.SubscriptionId);
-            if(existing == default)
+            if (existing == default)
             {
                 Console.Out.WriteLine("Telemetry was received from an unknown subscription id");
                 return;
@@ -35,6 +37,7 @@ namespace Kotvis.Examples.Edge.Jobs
             existing.LastMessageTime = DateTimeOffset.UtcNow;
 
             await _jobDependencies.EdgeService.SendMessageToOutput(Constants.Outputs.TelemetryUpstream, JsonConvert.SerializeObject(_telemetryMessage), _jobDependencies.CancellationToken);
+
         }
 
     }

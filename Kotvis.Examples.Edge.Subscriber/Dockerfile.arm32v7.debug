@@ -9,14 +9,14 @@ RUN useradd -ms /bin/bash moduleuser
 USER moduleuser
 RUN curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l ~/vsdbg
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster-arm32v7 AS build-env
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build-env
 WORKDIR /app
 
 COPY . .
 RUN dotnet restore ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj
 
 COPY . ./
-RUN dotnet publish ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj -c Debug -o out 
+RUN dotnet publish ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj -c Debug -o out
 
 FROM base
 WORKDIR /app

@@ -25,6 +25,14 @@ namespace Kotvis.Examples.Edge.Jobs
             _publisher.SubscriptionId = default;
             _publisher.ActualState = ActualPublisherState.StandingBy;
 
+            var schedulerRequest = new SchedulerCancelRequest()
+            {
+                ScheduleId = _publisher.HealthScheduleId,
+            };
+
+            await _jobDependencies.SchedulerService.CancelSchedule(schedulerRequest, _jobDependencies.CancellationToken);
+
+
             Console.Out.WriteLine($"Cancelling subscription for publisher id: {_publisher.Id}");
         }
     }

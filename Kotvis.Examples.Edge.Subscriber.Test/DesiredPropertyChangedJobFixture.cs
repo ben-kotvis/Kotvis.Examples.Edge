@@ -19,6 +19,12 @@ namespace pubsubsimulator.test
     public class DesiredPropertyChangedJobFixture
     {
         private Module _module;
+
+        public DesiredPropertyChangedJobFixture()
+        {
+            _module = new Module();
+        }
+
         public DesiredPropertyChangedJob CreateJob(TwinCollection twinCollection)
         {
             var edgeServiceMock = new Mock<IEdgeService>();
@@ -35,7 +41,6 @@ namespace pubsubsimulator.test
             var publisherApiServiceMock = new Mock<IPublisherApiService>();
 
             var tokenSource = new CancellationTokenSource();
-            _module = new Module();
             var dependencies = new JobDependencyLocator(edgeServiceMock.Object, schedulerServiceMock.Object, publisherApiServiceMock.Object, _module, tokenSource);
 
             return new DesiredPropertyChangedJob(dependencies, twinCollection);
@@ -113,6 +118,77 @@ namespace pubsubsimulator.test
             Assert.AreEqual(ActualPublisherState.Error, _module.Publishers.First(i => i.Id == desiredPublisher.Id).ActualState);
             Assert.AreEqual("Could not convert string to integer: not a port. Path 'Module.Publisher-publisherId.Port'.", 
                 _module.Publishers.First(i => i.Id == desiredPublisher.Id).ErrorContext);
+        }
+
+        [TestMethod]
+        public async Task ActualStateIsSetBasedOnDesired()
+        {
+            var desired = new Dictionary<string, object>();
+            desired.Add(Constants.TwinKeys.ModuleState, ModuleState.Online);
+
+            var desiredPublisher = new
+            {
+                Host = "127.0.0.1",
+                Id = "publisherId",
+                Port = 8089,
+                DesiredState = DesiredPublisherState.Online
+            };
+
+            desired.Add($"{Constants.TwinKeys.PublisherPrefix}{desiredPublisher.Id}", desiredPublisher);
+
+            var twin = new TwinCollection();
+            twin[Constants.TwinKeys.Module] = desired;
+
+            var job = CreateJob(twin);
+            await job.Run();
+
+            Assert.AreEqual(ActualPublisherState.Subscribed, _module.Publishers.First(i => i.Id == desiredPublisher.Id).ActualState);
+
+        }
+
+        [TestMethod]
+        public async Task ScheduledJobsRunningDesiredPublisherSetToOfflineScheduleIsCancelled()
+        {
+            var desired = new Dictionary<string, object>();
+            desired.Add(Constants.TwinKeys.ModuleState, ModuleState.Online);
+
+            var desiredPublisher = new
+            {
+                Host = "127.0.0.1",
+                Id = "publisherId",
+                Port = 8089,
+                DesiredState = DesiredPublisherState.Online
+            };
+
+            desired.Add($"{Constants.TwinKeys.PublisherPrefix}{desiredPublisher.Id}", desiredPublisher);
+
+            var twin = new TwinCollection();
+            twin[Constants.TwinKeys.Module] = desired;
+
+            var job = CreateJob(twin);
+            await job.Run();
+
+            desired = new Dictionary<string, object>();
+            desired.Add(Constants.TwinKeys.ModuleState, ModuleState.Online);
+
+            desiredPublisher = new
+            {
+                Host = "127.0.0.1",
+                Id = "publisherId",
+                Port = 8089,
+                DesiredState = DesiredPublisherState.StandingBy
+            };
+
+            desired.Add($"{Constants.TwinKeys.PublisherPrefix}{desiredPublisher.Id}", desiredPublisher);
+
+            twin = new TwinCollection();
+            twin[Constants.TwinKeys.Module] = desired;
+
+            job = CreateJob(twin);
+            await job.Run();
+
+            Assert.AreEqual(ActualPublisherState.StandingBy, _module.Publishers.First(i => i.Id == desiredPublisher.Id).ActualState);
+            
         }
 
         [TestMethod]

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.Devices.Client.Transport.Mqtt;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,12 @@ namespace subscriber
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+     
         public void ConfigureServices(IServiceCollection services)
         {
             CancellationTokenSource tokenSource = new CancellationTokenSource();
@@ -30,7 +37,7 @@ namespace subscriber
             services.AddSingleton<ModuleClient>(ioTHubModuleClient);
 
             services.AddSingleton<IEdgeService, EdgeService>();
-            services.AddSingleton<IPublisherApiService, PublisherApiService>();
+            services.AddSingleton<IPublisherApiService>(sp => new PublisherApiService(_configuration.GetValue<string>(Constants.EnvironmentVariables.SUBSCRIBER_ADDRESS)));
             services.AddSingleton<ISchedulerService, SchedulerService>();
             services.AddSingleton<Module>(new Module());
             services.AddSingleton<CancellationTokenSource>();
@@ -45,6 +52,8 @@ namespace subscriber
             {
                 endpoints.MapControllers();
             });
+
+           
 
             var initializer = new InitializerService(
                 app.ApplicationServices.GetService<ModuleClient>(),

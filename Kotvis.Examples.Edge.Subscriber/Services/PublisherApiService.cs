@@ -12,10 +12,12 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
     public class PublisherApiService : IPublisherApiService
     {
         private readonly RestClient _client;
+        private readonly string _subscriberHost;
 
-        public PublisherApiService()
+        public PublisherApiService(string subscriberHost)
         {
             _client = new RestClient();
+            _subscriberHost = subscriberHost;
         }
 
         public async Task CancelSubscription(Publisher publisher, CancellationToken cancellationToken)
@@ -41,7 +43,7 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
             var request = new RestRequest(new Uri($"http://{publisher.Host}:{publisher.Port}/api/subscribes"), Method.POST);
             var requestObject = new
             {
-                SubscriberAddress = "127.0.0.1",
+                SubscriberAddress = _subscriberHost,
                 SubscriberPort = 8081,
                 Username = "admin",
                 Password = "admin"

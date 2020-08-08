@@ -23,12 +23,11 @@ namespace Kotvis.Examples.Edge.Jobs
 
         public async Task Run()
         {
-            if(!_twinCollection.Contains(Constants.TwinKeys.Module))
+            if (!_twinCollection.Contains(Constants.TwinKeys.Module))
             {
                 await Console.Out.WriteLineAsync("Module not defined");
                 return;
             }
-
             JObject module = _twinCollection[Constants.TwinKeys.Module];
             _jobDependencies.Module.State = (ModuleState)module.SelectToken(Constants.TwinKeys.ModuleState).Value<Int32>();
 
@@ -70,7 +69,6 @@ namespace Kotvis.Examples.Edge.Jobs
                 modulePublisher.Port = publisher.Port;
                 modulePublisher.UserName = publisher.UserName;
                 modulePublisher.Password = publisher.Password;
-                modulePublisher.ActualState = ActualPublisherState.Default;
             }
             catch(Exception ex)
             {

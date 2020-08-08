@@ -44,5 +44,10 @@ namespace Kotvis.Examples.Edge.Model
             public const string PubSubHeartbeatJob = "PubSubHeartbeatJob";
             public const string PubSubTelemetryJob = "PubSubTelemetryJob";
         }
+
+        public class EnvironmentVariables
+        {
+            public const string SUBSCRIBER_ADDRESS = "SUBSCRIBER_ADDRESS";
+        }
     }
 }

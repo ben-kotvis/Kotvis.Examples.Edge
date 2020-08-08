@@ -9,5 +9,6 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Models
     {
         public string SubscriptionId { get; set; }
         public DateTimeOffset MessageTime { get; set; }
+        public int Pressure { get; set; }
     }
 }

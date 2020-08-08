@@ -7,6 +7,11 @@ namespace Kotvis.Examples.Edge.Model
 {
     public class Module : IChangeTracking
     {
+        public static object Locker;
+        static Module()
+        {
+            Locker = new object();
+        }
         public Module()
         {
             Publishers = new List<Publisher>();

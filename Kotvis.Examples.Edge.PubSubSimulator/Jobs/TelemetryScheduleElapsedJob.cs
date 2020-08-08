@@ -33,7 +33,8 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Jobs
             var subscriptionHeartbeat = new PublisherSubscriptionTelemetryMessage()
             {
                 MessageTime = DateTimeOffset.UtcNow.AddMinutes(60),
-                SubscriptionId = _elapsedScheduleMessage.Context
+                SubscriptionId = _elapsedScheduleMessage.Context,
+                Pressure = (new Random()).Next(20, 45)
             };
 
             request.AddJsonBody(subscriptionHeartbeat);
