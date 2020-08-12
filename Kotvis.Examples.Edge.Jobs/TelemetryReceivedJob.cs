@@ -36,6 +36,9 @@ namespace Kotvis.Examples.Edge.Jobs
             Console.Out.WriteLine($"Telemetry was received for publisher id: {existing.Id}");
             existing.LastMessageTime = DateTimeOffset.UtcNow;
 
+
+            await _jobDependencies.ConnectionTracker.SendTelemetry(existing, _telemetryMessage);
+
             await _jobDependencies.EdgeService.SendMessageToOutput(Constants.Outputs.TelemetryUpstream, JsonConvert.SerializeObject(_telemetryMessage), _jobDependencies.CancellationToken);
 
         }

@@ -58,9 +58,33 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
                     await job.Run();
                 }), _moduleClient);
 
-            var twin = await _moduleClient.GetTwinAsync();
-            var spinupJob = new DesiredPropertyChangedJob(_jobDependencyLocator, twin.Properties.Desired);
-            await spinupJob.Run();
+
+            await _moduleClient.SetMethodHandlerAsync(Constants.Inputs.AddPublisher,
+                new MethodCallback(async (mr, o) =>
+                {
+                    var job = new AddPublisherMethodJob(_jobDependencyLocator, mr.DataAsJson);
+                    await job.Run();
+
+                    return new MethodResponse(200);
+                }), _moduleClient, _tokenSource.Token);
+
+
+            var context = new ElapsedScheduleMessage()
+            {
+                Context = Constants.JobNames.HealthCheck,
+                ScheduleId = Guid.NewGuid().ToString(),
+                JobName = Constants.JobNames.HealthCheck
+            };
+
+            var schedulerRequest = new SchedulerRequest()
+            {
+                OutputName = Constants.Outputs.Subscriber,
+                Repeat = true,
+                RunTime = TimeSpan.FromSeconds(30),
+                Context = context
+            };
+
+            await _jobDependencyLocator.SchedulerService.ScheduleJob(schedulerRequest, _jobDependencyLocator.CancellationToken);
         }
 
     }

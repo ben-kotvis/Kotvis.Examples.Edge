@@ -1,5 +1,6 @@
 ﻿using Kotvis.Examples.Edge.Model;
 using Kotvis.Examples.Edge.Model.Interfaces;
+using Kotvis.Examples.Edge.Subscriber;
 using Kotvis.Examples.Edge.Subscriber.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,6 +37,7 @@ namespace subscriber
             
             services.AddSingleton<ModuleClient>(ioTHubModuleClient);
 
+            services.AddSingleton<IDeviceConnectionTracker, DeviceConnectionTracker>();
             services.AddSingleton<IEdgeService, EdgeService>();
             services.AddSingleton<IPublisherApiService>(sp => new PublisherApiService(_configuration.GetValue<string>(Constants.EnvironmentVariables.SUBSCRIBER_ADDRESS)));
             services.AddSingleton<ISchedulerService, SchedulerService>();

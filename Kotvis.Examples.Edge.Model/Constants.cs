@@ -21,6 +21,7 @@ namespace Kotvis.Examples.Edge.Model
         {
             public const string Schedule = "schedule";
             public const string SubscriberInbound = "subscriberinbound";
+            public const string AddPublisher = "AddPublisher";
         }
         public class Outputs
         {

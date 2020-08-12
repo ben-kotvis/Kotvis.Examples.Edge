@@ -26,6 +26,10 @@ namespace pubsubsimulator.test
 
             var schedulerServiceMock = new Mock<ISchedulerService>();
 
+
+            var deviceConnectionTrackerMock = new Mock<IDeviceConnectionTracker>();
+
+
             var publisherApiServiceMock = new Mock<IPublisherApiService>();
             publisherApiServiceMock
                 .Setup(i => i.Subscribe(It.IsAny<Publisher>(), It.IsAny<CancellationToken>()))
@@ -37,7 +41,7 @@ namespace pubsubsimulator.test
 
             var tokenSource = new CancellationTokenSource();
             _module = new Module();
-            _jobDependencyLocator = new JobDependencyLocator(edgeServiceMock.Object, schedulerServiceMock.Object, publisherApiServiceMock.Object, _module, tokenSource);
+            _jobDependencyLocator = new JobDependencyLocator(edgeServiceMock.Object, schedulerServiceMock.Object, publisherApiServiceMock.Object, _module, deviceConnectionTrackerMock.Object, tokenSource);
 
         }
 

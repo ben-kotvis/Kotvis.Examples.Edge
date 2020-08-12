@@ -26,25 +26,6 @@ namespace Kotvis.Examples.Edge.Jobs
             _publisher.ActualState = ActualPublisherState.Subscribed;
             _publisher.SubscriptionId = subscriptionId;
 
-            var context = new ElapsedScheduleMessage()
-            {
-                Context = subscriptionId,
-                ScheduleId = Guid.NewGuid().ToString(),
-                JobName = Constants.JobNames.HealthCheck
-            };
-
-            var schedulerRequest = new SchedulerRequest()
-            {
-                OutputName = Constants.Outputs.Subscriber,
-                Repeat = true,
-                RunTime = TimeSpan.FromSeconds(30),
-                Context = context
-            };
-
-            await _jobDependencies.SchedulerService.ScheduleJob(schedulerRequest, _jobDependencies.CancellationToken);
-
-            _publisher.HealthScheduleId = context.ScheduleId;
-
             Console.Out.WriteLine($"Subscription: {subscriptionId} created for {_publisher.Id}");
         }
     }

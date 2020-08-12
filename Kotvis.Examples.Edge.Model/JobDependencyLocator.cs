@@ -13,15 +13,17 @@ namespace Kotvis.Examples.Edge.Model
             ISchedulerService schedulerService,
             IPublisherApiService publisherApiService,
             Module module,
+            IDeviceConnectionTracker connectionTracker,
             CancellationTokenSource cancellationTokenSource)
         {
             EdgeService = edgeService;
             SchedulerService = schedulerService;
             PublisherApiService = publisherApiService;
             Module = module;
+            ConnectionTracker = connectionTracker;
             CancellationTokenSource = cancellationTokenSource;
         }
-
+        public IDeviceConnectionTracker ConnectionTracker { get; }
         public IEdgeService EdgeService { get; }
         public ISchedulerService SchedulerService { get; }
         public IPublisherApiService PublisherApiService { get; }

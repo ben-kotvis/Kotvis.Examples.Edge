@@ -36,12 +36,13 @@ namespace pubsubsimulator.test
                 });
 
             var schedulerServiceMock = new Mock<ISchedulerService>();
+            var deviceConnectionTrackerMock = new Mock<IDeviceConnectionTracker>();
 
 
             var publisherApiServiceMock = new Mock<IPublisherApiService>();
 
             var tokenSource = new CancellationTokenSource();
-            var dependencies = new JobDependencyLocator(edgeServiceMock.Object, schedulerServiceMock.Object, publisherApiServiceMock.Object, _module, tokenSource);
+            var dependencies = new JobDependencyLocator(edgeServiceMock.Object, schedulerServiceMock.Object, publisherApiServiceMock.Object, _module, deviceConnectionTrackerMock.Object, tokenSource);
 
             return new DesiredPropertyChangedJob(dependencies, twinCollection);
         }
