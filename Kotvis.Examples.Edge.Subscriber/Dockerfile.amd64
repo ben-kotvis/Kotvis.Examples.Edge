@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 EXPOSE 8081
 
-RUN apt-get update || true && \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends unzip procps && \
     rm -rf /var/lib/apt/lists/*
 
@@ -18,8 +18,27 @@ RUN dotnet restore ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscr
 COPY . ./
 RUN dotnet publish ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj -c Release -o out 
 
-FROM base
-WORKDIR /app
-COPY --from=build-env /app/out ./
+ARG DEBIAN_FRONTEND=noninteractive
 
-ENTRYPOINT ["dotnet", "Kotvis.Examples.Edge.Subscriber.dll"]
+RUN apt-get update \
+    && apt-get install -y procps \
+    && apt-get install -y wget \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget https://github.com/dapr/dapr/releases/download/v0.6.0/daprd_linux_amd64.tar.gz
+RUN tar -zxvf daprd_linux_amd64.tar.gz
+
+FROM base
+COPY --from=build-env /app/out ./
+COPY --from=build-env /app/daprd ./
+COPY --from=build-env /app/out/components ./components/
+
+COPY --from=build-env /app/out/runWithDapr.sh ./
+
+USER root
+RUN chmod +x runWithDapr.sh
+
+USER moduleuser
+ENV PATH /app:$PATH
+
+CMD ["/bin/bash", "runWithDapr.sh"]

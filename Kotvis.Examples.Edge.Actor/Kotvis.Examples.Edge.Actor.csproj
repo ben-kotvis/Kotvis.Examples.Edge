@@ -25,17 +25,18 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
-    <PackageReference Include="RestSharp" Version="106.11.4" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kotvis.Examples.Edge.Actor.Model\Kotvis.Examples.Edge.Actor.Model.csproj" />
-    <ProjectReference Include="..\Kotvis.Examples.Edge.Jobs\Kotvis.Examples.Edge.Jobs.csproj" />
     <ProjectReference Include="..\Kotvis.Examples.Edge.Model\Kotvis.Examples.Edge.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="azure-iot-test-only.root.ca.cert.pem">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="components\redis.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 EXPOSE 8081
+EXPOSE 3000
 EXPOSE 50001
 
 RUN apt-get update && \
@@ -11,13 +12,13 @@ USER moduleuser
 RUN curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v latest -l ~/vsdbg
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build-env
-WORKDIR /app/Kotvis.Examples.Edge.Subscriber
+WORKDIR /app/Kotvis.Examples.Edge.Actor
 
 COPY . .
-RUN dotnet restore ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj
+RUN dotnet restore ./Kotvis.Examples.Edge.Actor/Kotvis.Examples.Edge.Actor.csproj
 
 COPY . ./
-RUN dotnet publish ./Kotvis.Examples.Edge.Subscriber/Kotvis.Examples.Edge.Subscriber.csproj -c Debug -o out 
+RUN dotnet publish ./Kotvis.Examples.Edge.Actor/Kotvis.Examples.Edge.Actor.csproj -c Debug -o out 
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -31,10 +32,10 @@ RUN tar -zxvf daprd_linux_amd64.tar.gz
 
 FROM base
 WORKDIR /app
-COPY --from=build-env /app/Kotvis.Examples.Edge.Subscriber/out ./
-COPY --from=build-env /app/Kotvis.Examples.Edge.Subscriber/daprd ./
-COPY ./Kotvis.Examples.Edge.Subscriber/components ./components/
-COPY ./Kotvis.Examples.Edge.Subscriber/runWithDapr.sh ./
+COPY --from=build-env /app/Kotvis.Examples.Edge.Actor/out ./
+COPY --from=build-env /app/Kotvis.Examples.Edge.Actor/daprd ./
+COPY ./Kotvis.Examples.Edge.Actor/components ./components/
+COPY ./Kotvis.Examples.Edge.Actor/runWithDapr.sh ./
 
 USER root
 RUN chmod +x runWithDapr.sh

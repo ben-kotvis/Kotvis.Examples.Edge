@@ -1,6 +1,5 @@
 ﻿using Kotvis.Examples.Edge.Model;
 using Kotvis.Examples.Edge.Model.Interfaces;
-using Kotvis.Examples.Edge.PubSubSimulator.Models;
 using Microsoft.Azure.Devices.Shared;
 using Newtonsoft.Json.Linq;
 using System;

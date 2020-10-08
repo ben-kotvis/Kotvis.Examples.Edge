@@ -100,8 +100,73 @@
               "image": "${MODULEDIR<../Kotvis.Examples.Edge.Scheduler>.debug}",
               "createOptions": {}
             }
+          },
+          "kotvisexamplesedgeactor": {
+            "version": "1.0.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULEDIR<../Kotvis.Examples.Edge.Actor>.debug}",
+              "createOptions": {}
+            },
+            "env": {
+              "ID_SCOPE": {
+                "value": "${ID_SCOPE}"
+              },
+              "GLOBAL_DEVICE_ENDPOINT": {
+                "value": "${GLOBAL_DEVICE_ENDPOINT}"
+              },
+              "PRIMARY_KEY": {
+                "value": "${PRIMARY_KEY}"
+              },
+              "SECONDARY_KEY": {
+                "value": "${SECONDARY_KEY}"
+              }
+            }
+          },
+          "redis": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "redis",
+              "createOptions": {}
+            }
+          },
+          "placement": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "daprio/dapr",
+              "createOptions": {
+                "Cmd": [
+                  "./placement",
+                  "--port",
+                  "50005"
+                ],
+                "ExposedPorts": { "8081/tcp":{}},
+                  "HostConfig": {
+                    "PortBindings": {
+                      "50005/tcp": [
+                        {
+                          "HostPort": "50005"
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+            "env": {
+              "DAPR_HOST_IP": {
+                "value": "placement"
+              }
+            }
           }
-        }
+        }        
       }
     },
     "$edgeHub": {
@@ -111,7 +176,8 @@
           "schedulerToIoTHub": "FROM /messages/modules/scheduler/outputs/to-subscriber INTO BrokeredEndpoint(\"/modules/subscriber/inputs/subscriberinbound\")",
           "schedulerToPubSubSimulator": "FROM /messages/modules/scheduler/outputs/to-pubsubsimulator INTO BrokeredEndpoint(\"/modules/pubsubsimulator/inputs/subscriberinbound\")",
           "SubscriberToScheduler": "FROM /messages/modules/subscriber/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")",
-          "PubSubToScheduler": "FROM /messages/modules/pubsubsimulator/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")"
+          "PubSubToScheduler": "FROM /messages/modules/pubsubsimulator/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")",
+          "kotvisexamplesedgeactorToIoTHub": "FROM /messages/modules/kotvisexamplesedgeactor/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

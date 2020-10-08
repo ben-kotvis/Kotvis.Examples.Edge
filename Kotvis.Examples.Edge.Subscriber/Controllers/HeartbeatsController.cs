@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Kotvis.Examples.Edge.Model;
 using Kotvis.Examples.Edge.Jobs;
-using Kotvis.Examples.Edge.PubSubSimulator.Models;
+using Kotvis.Examples.Edge.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

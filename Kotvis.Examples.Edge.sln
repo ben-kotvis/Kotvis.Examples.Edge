@@ -17,6 +17,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotvis.Examples.Edge.Jobs",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kotvis.Examples.Edge.Scheduler", "Kotvis.Examples.Edge.Scheduler\Kotvis.Examples.Edge.Scheduler.csproj", "{59BC4EF2-E7EC-44CF-8A80-36A4AC6C939B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotvis.Examples.Edge.Actor.Model", "Kotvis.Examples.Edge.Actor.Model\Kotvis.Examples.Edge.Actor.Model.csproj", "{1B8F15FF-7CD9-41B1-BB5E-E89453BDBF37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kotvis.Examples.Edge.Actor", "Kotvis.Examples.Edge.Actor\Kotvis.Examples.Edge.Actor.csproj", "{457A8F80-CA1E-4E6E-B8C1-69C39B3B7844}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{59BC4EF2-E7EC-44CF-8A80-36A4AC6C939B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59BC4EF2-E7EC-44CF-8A80-36A4AC6C939B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59BC4EF2-E7EC-44CF-8A80-36A4AC6C939B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8F15FF-7CD9-41B1-BB5E-E89453BDBF37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8F15FF-7CD9-41B1-BB5E-E89453BDBF37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8F15FF-7CD9-41B1-BB5E-E89453BDBF37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8F15FF-7CD9-41B1-BB5E-E89453BDBF37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{457A8F80-CA1E-4E6E-B8C1-69C39B3B7844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{457A8F80-CA1E-4E6E-B8C1-69C39B3B7844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{457A8F80-CA1E-4E6E-B8C1-69C39B3B7844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{457A8F80-CA1E-4E6E-B8C1-69C39B3B7844}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,9 +2,9 @@
     "$schema-version": "0.0.1",
     "description": "",
   "image": {
-    "repository": "centraledge.azurecr.io/scheduler",
+    "repository": "${CONTAINER_REGISTRY}/kotvisexamplesedgeactor",
     "tag": {
-      "version": "0.0.9",
+      "version": "0.0.23",
       "platforms": {
         "amd64": "./Dockerfile.amd64",
         "amd64.debug": "./Dockerfile.amd64.debug",

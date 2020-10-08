@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Kotvis.Examples.Edge.PubSubSimulator.Models
+namespace Kotvis.Examples.Edge.Models
 {
     public class PublisherTelemetryMessage
     {

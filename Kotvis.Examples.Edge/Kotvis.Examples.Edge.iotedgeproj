@@ -19,6 +19,8 @@
   </PropertyGroup>
   <Import Project="$(MSBuildToolsRoot)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Azure IoT Edge Tools\AzureIoTEdgeProject.targets" />
   <ItemGroup>
+    <None Include=".env" />
+    <None Include=".gitignore" />
     <None Include="deployment.template.json" />
     <None Include="deployment.debug.template.json" />
   </ItemGroup>
@@ -26,6 +28,7 @@
     <ProjectReference Include="..\Kotvis.Examples.Edge.PubSubSimulator\Kotvis.Examples.Edge.PubSubSimulator.csproj" />
     <ProjectReference Include="..\Kotvis.Examples.Edge.Scheduler\Kotvis.Examples.Edge.Scheduler.csproj" />
     <ProjectReference Include="..\Kotvis.Examples.Edge.Subscriber\Kotvis.Examples.Edge.Subscriber.csproj" />
+    <ProjectReference Include="..\Kotvis.Examples.Edge.Actor\Kotvis.Examples.Edge.Actor.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsRoot)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Azure IoT Edge Tools\AzureIoTEdgeProject.Build.targets" />
   <Import Project="$(MSBuildToolsRoot)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Azure IoT Edge Tools\AzureIoTEdgeProject.Build.props" />
