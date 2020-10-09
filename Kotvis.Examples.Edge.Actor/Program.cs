@@ -29,11 +29,7 @@ namespace kotvisexamplesedgeactor
         {
             Init().Wait();            
 
-            CreateWebHostBuilder(args, 
-                Environment.GetEnvironmentVariable(KEY_ID_SCOPE),
-                Environment.GetEnvironmentVariable(KEY_GLOBAL_DEVICE_ENDPOINT),
-                Environment.GetEnvironmentVariable(KEY_PRIMARY_KEY),
-                Environment.GetEnvironmentVariable(KEY_SECONDARY_KEY)).Build().Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         /// <summary>
@@ -53,7 +49,7 @@ namespace kotvisexamplesedgeactor
         }
 
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args, string idScope, string globalDeviceEndpoint, string primaryKey, string secondaryKey) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseActors(actorRuntime =>
@@ -62,6 +58,11 @@ namespace kotvisexamplesedgeactor
                     {
                         return new ActorService(info, (service, id) =>
                         {
+                            string idScope = Environment.GetEnvironmentVariable(KEY_ID_SCOPE);
+                            string globalDeviceEndpoint = Environment.GetEnvironmentVariable(KEY_GLOBAL_DEVICE_ENDPOINT);
+                            string primaryKey = Environment.GetEnvironmentVariable(KEY_PRIMARY_KEY);
+                            string secondaryKey = Environment.GetEnvironmentVariable(KEY_SECONDARY_KEY);
+
                             return new SimulatedPublisherActor(service, id, idScope, globalDeviceEndpoint, primaryKey, secondaryKey);
                         });
                     });

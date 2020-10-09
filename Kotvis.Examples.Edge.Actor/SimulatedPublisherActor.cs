@@ -30,6 +30,8 @@ namespace Kotvis.Examples.Edge.Actor
             _globalDeviceEndpoint = globalDeviceEndpoint;
             _primaryKey = primaryKey;
             _secondaryKey = secondaryKey;
+
+            Console.WriteLine($"stuff {_idScope} - {_globalDeviceEndpoint} - {_primaryKey} - {_secondaryKey}");
         }
 
         /// <summary>

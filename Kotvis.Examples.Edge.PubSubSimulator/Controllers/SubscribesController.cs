@@ -26,18 +26,19 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Controllers
         public async Task<CreatedResult> Post(SubscribeRequest subscribeRequest, CancellationToken cancellationToken)
         {
             var subscriptionId = Guid.NewGuid().ToString();
-            var scheduleId = Guid.NewGuid().ToString(); 
+            var heartbeatScheduleId = Guid.NewGuid().ToString();
+            var telemetryScheduleId = Guid.NewGuid().ToString();
 
-            await _schedulerService.ScheduleJob(CreateRequest(subscriptionId, scheduleId, Constants.JobNames.PubSubHeartbeatJob), cancellationToken);
-            await _schedulerService.ScheduleJob(CreateRequest(subscriptionId, scheduleId, Constants.JobNames.PubSubTelemetryJob), cancellationToken);
+            await _schedulerService.ScheduleJob(CreateRequest(subscriptionId, heartbeatScheduleId, Constants.JobNames.PubSubHeartbeatJob), cancellationToken);
+            await _schedulerService.ScheduleJob(CreateRequest(subscriptionId, telemetryScheduleId, Constants.JobNames.PubSubTelemetryJob), cancellationToken);
 
             var request = new Subscription()
             {
                 Request = subscribeRequest,
-                ScheduleId = scheduleId
+                ScheduleId = heartbeatScheduleId
             };
 
-            _stateManager.AddSchedule(subscriptionId, request);                
+            _stateManager.AddSubscription(subscriptionId, request);                
 
             var response = new PubSubSimulator.Models.SubscribeResponse()
             {

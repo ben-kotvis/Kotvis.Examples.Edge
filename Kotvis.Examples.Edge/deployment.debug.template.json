@@ -9,7 +9,13 @@
           "settings": {
             "minDockerVersion": "v1.25",
             "loggingOptions": "",
-            "registryCredentials": {}
+            "registryCredentials": {
+              "centraledge": {
+                "username": "${CONTAINER_REGISTRY_USERNAME}",
+                "password": "${CONTAINER_REGISTRY_PASSWORD}",
+                "address": "${CONTAINER_REGISTRY}"
+              }
+            }
           }
         },
         "systemModules": {
@@ -65,9 +71,19 @@
                       {
                         "HostPort": "8081"
                       }
+                    ],
+                    "50002/tcp": [
+                      {
+                        "HostPort": "50001"
+                      }
                     ]
                   }
                 }
+              }
+            },
+            "env": {
+              "SUBSCRIBER_ADDRESS": {
+                "value":  "subscriber"
               }
             }
           },
@@ -108,7 +124,22 @@
             "restartPolicy": "always",
             "settings": {
               "image": "${MODULEDIR<../Kotvis.Examples.Edge.Actor>.debug}",
-              "createOptions": {}
+              "createOptions": {
+                "HostConfig": {
+                  "PortBindings": {
+                    "3000/tcp": [
+                      {
+                        "HostPort": "3000"
+                      }
+                    ],
+                    "50001/tcp": [
+                      {
+                        "HostPort": "50001"
+                      }
+                    ]
+                  }
+                }
+              }
             },
             "env": {
               "ID_SCOPE": {
@@ -132,7 +163,17 @@
             "restartPolicy": "always",
             "settings": {
               "image": "redis",
-              "createOptions": {}
+              "createOptions": {
+                "HostConfig": {
+                  "PortBindings": {
+                    "6379/tcp": [
+                      {
+                        "HostPort": "6380"
+                      }
+                    ]
+                  }
+                }
+              }
             }
           },
           "placement": {
@@ -148,18 +189,18 @@
                   "--port",
                   "50005"
                 ],
-                "ExposedPorts": { "8081/tcp":{}},
-                  "HostConfig": {
-                    "PortBindings": {
-                      "50005/tcp": [
-                        {
-                          "HostPort": "50005"
-                        }
-                      ]
-                    }
+                "HostConfig": {
+                  "PortBindings": {
+                    "50005/tcp": [
+                      {
+                        "HostPort": "50005"
+                      }
+                    ]
                   }
                 }
-              },
+
+              }
+            },
             "env": {
               "DAPR_HOST_IP": {
                 "value": "placement"
@@ -177,7 +218,7 @@
           "schedulerToPubSubSimulator": "FROM /messages/modules/scheduler/outputs/to-pubsubsimulator INTO BrokeredEndpoint(\"/modules/pubsubsimulator/inputs/subscriberinbound\")",
           "SubscriberToScheduler": "FROM /messages/modules/subscriber/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")",
           "PubSubToScheduler": "FROM /messages/modules/pubsubsimulator/outputs/scheduler INTO BrokeredEndpoint(\"/modules/scheduler/inputs/schedule\")",
-          "kotvisexamplesedgeactorToIoTHub": "FROM /messages/modules/kotvisexamplesedgeactor/outputs/* INTO $upstream"
+          "DeviceToUpstream": "FROM /messages/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
@@ -186,15 +227,7 @@
     },
     "scheduler": {
       "properties.desired": {
-        "Module": {
-          "State": 1,
-          "Publisher-simulatorOne": {
-            "Id": "simulatorOne",
-            "Host": "127.0.0.1",
-            "Port": 8082,
-            "DesiredState": 0
-          }
-        }
+       
       }
     }
   }

@@ -56,6 +56,8 @@ namespace pubsubsimulator
                     byte[] messageBytes = m.GetBytes();
                     string messageString = Encoding.UTF8.GetString(messageBytes);
 
+                    Console.WriteLine($"Message received: {messageString}");
+
                     var request = JsonConvert.DeserializeObject<ElapsedScheduleMessage>(messageString);
                     IJob job = default;
                     switch(request.JobName)

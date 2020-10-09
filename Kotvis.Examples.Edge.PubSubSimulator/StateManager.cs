@@ -18,7 +18,7 @@ namespace Kotvis.Examples.Edge.PubSubSimulator
             _subscriptionLookup = new Dictionary<string, Subscription>();
         }
 
-        public void AddSchedule(string id, Subscription subscribeRequest)
+        public void AddSubscription(string id, Subscription subscribeRequest)
         {
             _subscriptionLookup.Add(id, subscribeRequest);
         }

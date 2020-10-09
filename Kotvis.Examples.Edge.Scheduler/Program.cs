@@ -81,6 +81,8 @@ namespace scheduler
             byte[] messageBytes = message.GetBytes();
             string messageString = Encoding.UTF8.GetString(messageBytes);
 
+            Console.WriteLine($"Received request: {messageString}");
+
             var requestType = message.Properties[Constants.PropertyNames.RequestType];
 
             switch (requestType)
