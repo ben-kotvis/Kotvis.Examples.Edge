@@ -9,6 +9,7 @@ namespace Kotvis.Examples.Edge.Actor.Model
     public interface ISimulatedPublisherActor : IActor
     {
         Task SendTelemetry(PublisherTelemetryMessage message);
-        Task Connect();
+        Task Connect(string deviceId);
+        Task Heartbeat();
     }
 }

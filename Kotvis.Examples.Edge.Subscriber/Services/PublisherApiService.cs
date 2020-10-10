@@ -43,10 +43,11 @@ namespace Kotvis.Examples.Edge.Subscriber.Services
             var request = new RestRequest(new Uri($"http://{publisher.Host}:{publisher.Port}/api/subscribes"), Method.POST);
             var requestObject = new
             {
-                SubscriberAddress = _subscriberHost,
-                SubscriberPort = 8081,
+                SubscriberAddress = "kotvisexamplesedgeactor",
+                SubscriberPort = 3500,
                 Username = "admin",
-                Password = "admin"
+                Password = "admin",
+                PublisherActorId = publisher.PublisherActorId
             };
 
             request.AddJsonBody(requestObject);

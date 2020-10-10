@@ -28,6 +28,7 @@ namespace Kotvis.Examples.Edge.Jobs
             {
                 Console.WriteLine($"Add publisher job called with payload {_payload}");
                 var publisher = JsonConvert.DeserializeObject<Publisher>(_payload);
+                publisher.PublisherActorId = Guid.NewGuid().ToString();
 
                 _jobDependencies.Module.Publishers.Add(publisher);
                 await _jobDependencies.ConnectionTracker.Add(publisher);

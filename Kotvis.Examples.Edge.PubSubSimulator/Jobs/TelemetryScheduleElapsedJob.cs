@@ -27,8 +27,7 @@ namespace Kotvis.Examples.Edge.PubSubSimulator.Jobs
         public async Task Run()
         {
             var subscriberRequest = _stateManager.GetRequest(_elapsedScheduleMessage.Context);
-
-            RestRequest request = new RestRequest(new Uri($"http://{subscriberRequest.Request.SubscriberAddress}:{subscriberRequest.Request.SubscriberPort}/api/telemetries"));
+            RestRequest request = new RestRequest(new Uri($"http://{subscriberRequest.Request.SubscriberAddress}:{subscriberRequest.Request.SubscriberPort}/v1.0/actors/SimulatedPublisherActor/{subscriberRequest.Request.PublisherActorId}/method/SendTelemetry"));
 
             var subscriptionHeartbeat = new PublisherSubscriptionTelemetryMessage()
             {

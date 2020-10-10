@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
 using Kotvis.Examples.Edge.Models;
+using System.Configuration;
 
 namespace Kotvis.Examples.Edge.Actor
 {
@@ -31,7 +32,6 @@ namespace Kotvis.Examples.Edge.Actor
             _primaryKey = primaryKey;
             _secondaryKey = secondaryKey;
 
-            Console.WriteLine($"stuff {_idScope} - {_globalDeviceEndpoint} - {_primaryKey} - {_secondaryKey}");
         }
 
         /// <summary>
@@ -76,13 +76,19 @@ namespace Kotvis.Examples.Edge.Actor
             await base.OnDeactivateAsync();
         }
 
-        public async Task Connect()
+        public async Task Connect(string deviceId)
         {
-            //Group enrollment flow, the primary and secondary keys are derived from the enrollment group keys and from the desired registration id
-            string primaryKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(_primaryKey), this.Id.ToString());
-            string secondaryKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(_secondaryKey), this.Id.ToString());
+            var state = new SimulatedPublisherActorState();
+            state.DeviceId = deviceId;
+            state.HeartbeatTime = DateTimeOffset.UtcNow;
 
-            _security = new SecurityProviderSymmetricKey(this.Id.ToString(), primaryKey, secondaryKey);
+            await this.StateManager.SetStateAsync(SimulatedPublisherActorState.StateName, state);
+
+            //Group enrollment flow, the primary and secondary keys are derived from the enrollment group keys and from the desired registration id
+            string primaryKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(_primaryKey), deviceId);
+            string secondaryKey = ComputeDerivedSymmetricKey(Convert.FromBase64String(_secondaryKey), deviceId);
+
+            _security = new SecurityProviderSymmetricKey(deviceId, primaryKey, secondaryKey);
             _transport = new ProvisioningTransportHandlerAmqp(TransportFallbackType.TcpOnly);
 
             ProvisioningDeviceClient provClient = ProvisioningDeviceClient.Create(
@@ -102,13 +108,13 @@ namespace Kotvis.Examples.Edge.Actor
             Client = DeviceClient.Create(result.AssignedHub, "upboard", auth, TransportType.Amqp);
             await Client.OpenAsync();
 
-
+            /*
             await Client.SetDesiredPropertyUpdateCallbackAsync(
                  new DesiredPropertyUpdateCallback((tc, o) =>
                  {
                      Console.WriteLine(tc.ToJson());
                      return Task.FromResult(false);
-                 }), Client);
+                 }), Client);*/
 
         }
 
@@ -117,6 +123,13 @@ namespace Kotvis.Examples.Edge.Actor
             var bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
             await Client.SendEventAsync(new Message(bytes));
+        }
+
+        public async Task Heartbeat()
+        {
+            var state = await this.StateManager.GetStateAsync<SimulatedPublisherActorState>(SimulatedPublisherActorState.StateName);
+            state.HeartbeatTime = DateTimeOffset.UtcNow;
+            await this.StateManager.SetStateAsync(SimulatedPublisherActorState.StateName, state);
         }
     }
 

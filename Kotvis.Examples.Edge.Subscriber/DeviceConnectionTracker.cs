@@ -13,8 +13,8 @@ namespace Kotvis.Examples.Edge.Subscriber
     {
         public async Task Add(Publisher publisher)
         {
-            var proxy = ActorProxy.Create<ISimulatedPublisherActor>(new ActorId(publisher.Id), "SimulatedPublisherActor");
-            await proxy.Connect();
+            var proxy = ActorProxy.Create<ISimulatedPublisherActor>(new ActorId(publisher.PublisherActorId), "SimulatedPublisherActor");
+            await proxy.Connect(publisher.Id);
         }
         public Task Remove(string publisherId)
         {

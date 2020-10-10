@@ -53,6 +53,20 @@ namespace Kotvis.Examples.Edge.Model
             }
         }
 
+        string _publisherActorId;
+        public string PublisherActorId
+        {
+            get => _publisherActorId;
+            set
+            {
+                if (_publisherActorId != value)
+                {
+                    _publisherActorId = value;
+                    IsChanged = true;
+                }
+            }
+        }
+
         string _password;
         public string Password
         {
